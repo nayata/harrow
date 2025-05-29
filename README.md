@@ -7,7 +7,7 @@ Harrow provides a custom syntax, a parsing library, and a runtime environment de
 ## Example
 
 
-```toml
+```twee
 // CaveEntrance
 
 [torchLit = false]
@@ -37,7 +37,6 @@ You step forward, heart pounding.
 
 # Ledge
     The rocks shift underfoot as you climb. At the top, a hidden alcove reveals a faded mural of a forgotten king.
-
 ```
 
 ## How It Works
