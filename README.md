@@ -7,7 +7,7 @@ Harrow provides a custom syntax, a parsing library, and a runtime environment de
 ## Example
 
 
-```twee
+```toml
 // CaveEntrance
 
 [torchLit = false]
