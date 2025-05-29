@@ -48,9 +48,12 @@ You step forward, heart pounding.
     At the top, a hidden alcove reveals a faded mural of a forgotten king.
 ```
 
-## How It Works
-1. Use harrow.Library to parse a story file into a harrow.Story object.
+## Story format
+Stories in **Harrow** are written using simple `.txt` files with a minimal custom syntax. Alternatively, **Twine** can be used as a visual editor.
 
-2. Pass the Story to harrow.Runtime, which interprets and runs the content.
+Harrow includes a built-in parser for `.twee` files — the format used by Twine — allowing stories created in Twine to be run directly within the Harrow runtime.
 
-3. Attach listeners to runtime events like showText, showDialogue, and runCommand to connect the narrative to UI and game systems.
+A public version of the Twine `format.js` compatible with Harrow:
+```
+https://nayata.github.io/format/format.js
+```
