@@ -51,6 +51,15 @@ You step forward, heart pounding.
 ```
 
 
+## Library
+
+Install the library from haxelib:
+
+```
+haxelib install harrow
+```
+
+
 ## Story format
 
 Stories in **Harrow** are written using simple `.txt` files with a minimal custom syntax. Alternatively, **Twine** can be used as a visual editor.
@@ -58,12 +67,14 @@ Stories in **Harrow** are written using simple `.txt` files with a minimal custo
 Harrow includes a built-in parser for `.twee` files — the format used by Twine — allowing stories created in Twine to be run directly within the Harrow runtime.
 
 
-### Twine integration
+## Twine
 
 Link to the Harrow `format.js` for use in the Twine editor:
 ```
 https://nayata.github.io/format/format.js
 ```
 
-harrow-twine - Twine story format based on Harrow, perfect for testing or even publishing directly in Twine. With syntax highlighting and a custom toolbar for the most commonly used actions.
+[harrow-twine](https://github.com/nayata/harrow-twine) - Twine story format based on Harrow, perfect for testing or even publishing directly in Twine. With syntax highlighting and a custom toolbar for the most commonly used actions.
+
+## Documentation
 
