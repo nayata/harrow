@@ -4,6 +4,13 @@ Harrow is a narrative library for stories that need to be told
 ## Overview
 Harrow provides a custom syntax, a parsing library, and a runtime environment designed for interactive narrative games.
 
+## How It Works
+1. Use `harrow.Library` to parse a story file into a `harrow.Story` object.
+
+2. Pass the Story to `harrow.Runtime`, which interprets and runs the content.
+
+3. Attach listeners to runtime events like show text, show choices, commands to connect the narrative to UI or game systems.
+
 ## Example
 
 
@@ -33,10 +40,12 @@ You step forward, heart pounding.
 
 
 # Tunnel
-    The tunnel twists sharply, the walls damp and close. A faint sound echoes ahead — like whispering metal.
+    The tunnel twists sharply, the walls damp and close. 
+    A faint sound echoes ahead — like whispering metal.
 
 # Ledge
-    The rocks shift underfoot as you climb. At the top, a hidden alcove reveals a faded mural of a forgotten king.
+    The rocks shift underfoot as you climb.
+    At the top, a hidden alcove reveals a faded mural of a forgotten king.
 ```
 
 ## How It Works
