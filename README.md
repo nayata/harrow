@@ -1,4 +1,4 @@
-# HARROW
+# Harrow
 
 **Harrow** is a custom syntax, a parsing library, and a runtime for narrative-driven games.
 
