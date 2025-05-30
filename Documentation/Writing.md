@@ -6,6 +6,7 @@
 4) Variables
 5) Conditional blocks
 6) Actions
+7) Events
 
 
 
@@ -239,3 +240,29 @@ In addition to the `move` command, Harrow supports several built-in **actions** 
   ```
   [transition]
   ```
+
+
+
+# Events
+
+Custom events can be defined using square brackets, as long as the event name does not conflict with existing **action**, **condition**, or **variable** keywords.
+
+When a custom event is encountered, it will trigger the function:
+
+```
+onEvent(type, data)
+```
+
+* `type` — the part of the event before the first space
+* `data` — the remaining content after the first space
+
+This mechanism allows for custom logic, UI updates, sound effects, or any external behavior needed during story execution.
+
+### Example:
+
+```
+[sound play cave_wind.ogg]
+[show image cave_entrance.png]
+```
+
+Learn more about event handling in the `Running` section.
