@@ -34,6 +34,36 @@ You step forward, heart pounding.
 ```
 
 
+
+# Choices
+
+Choices can be created using the `-` symbol at the beginning of a line.
+
+A choice may include an action, written after a `:` symbol.
+There are two types of actions:
+
+1. Route navigation – to jump to another passage.
+
+2. Variable operation – to change or assign a variable.
+
+A choice may also be empty and simply continue the current flow.
+
+```
+- Attack : damage = 20 // set damage to 20
+- Drink potion : Heal // move to route `Heal`
+- Wait
+```
+
+In this example:
+
+- The `Attack` choice uses an action to set damage to 20.
+
+- The `Drink potion` choice uses an action to navigate to the `Heal` route.
+
+- The `Wait` choice has no action and continues the current flow.
+
+
+
 # Variables
 
 Variables are declared using square brackets and the `=` operator.
