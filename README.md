@@ -1,19 +1,10 @@
 # Harrow
 
-**Harrow** is a custom syntax, a parsing library, and a runtime for narrative-driven games.
+Library and a runtime for narrative-driven games.
 
-
-## How It Works
-
-1. Use `harrow.Library` to parse a story file into a `harrow.Story` object.
-
-2. Pass the Story to `harrow.Runtime`, which interprets and runs the content.
-
-3. Attach listeners to `harrow.Runtime` events like text, choices and actions to connect the narrative to UI or game systems.
 
 
 ## Example
-
 
 ```twee
 // CaveEntrance
@@ -51,30 +42,20 @@ You step forward, heart pounding.
 ```
 
 
-## Library
 
-Install the library from haxelib:
+## How It Works
 
-```
-haxelib install harrow
-```
+1. Use `harrow.Library` to parse a story file into a `harrow.Story` object.
 
+2. Pass the `Story` to `harrow.Runtime`, which interprets and runs the content.
 
-## Story format
-
-Stories in **Harrow** are written using simple `.txt` files with a minimal custom syntax. Alternatively, **Twine** can be used as a visual editor.
-
-Harrow includes a built-in parser for `.twee` files — the format used by Twine — allowing stories created in Twine to be run directly within the Harrow runtime.
+3. Attach listeners to `harrow.Runtime` events like text, choices and actions to connect the narrative to UI or game systems.
 
 
-## Twine
-
-Link to the Harrow `format.js` for use in the Twine editor:
-```
-https://nayata.github.io/format/format.js
-```
-
-[harrow-twine](https://github.com/nayata/harrow-twine) - Twine story format based on Harrow, perfect for testing or even publishing directly in Twine. With syntax highlighting and a custom toolbar for the most commonly used actions.
 
 ## Documentation
+
+[Writing](https://github.com/nayata/harrow/blob/main/Documentation/Writing.md).
+[Running](https://github.com/nayata/harrow/blob/main/Documentation/Running.md).
+[Twine as editor](https://github.com/nayata/harrow/blob/main/Documentation/Twine.md).
 
