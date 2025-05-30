@@ -7,9 +7,8 @@ Library and a runtime for narrative-driven games.
 ## Example
 
 ```twee
-// CaveEntrance
-
 [torchLit = false]
+
 
 The mouth of the cave yawns open, cold air curling out like breath. 
 Moss clings to the stones, and the scent of damp earth fills the air. 
@@ -55,7 +54,7 @@ You step forward, heart pounding.
 
 ## Documentation
 
-* [Writing](https://github.com/nayata/harrow/blob/main/Documentation/Writing.md).
-* [Running](https://github.com/nayata/harrow/blob/main/Documentation/Running.md).
-* [Twine as editor](https://github.com/nayata/harrow/blob/main/Documentation/Twine.md).
+* [Writing](https://github.com/nayata/harrow/blob/main/Documentation/Writing.md)
+* [Running](https://github.com/nayata/harrow/blob/main/Documentation/Running.md)
+* [Twine as editor](https://github.com/nayata/harrow/blob/main/Documentation/Twine.md)
 
