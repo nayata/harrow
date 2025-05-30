@@ -1,6 +1,6 @@
 # Introduction
 
-![Twine](/twine.png "Twine")
+![Twine](twine.png "Twine")
 
 **Harrow** uses a flow-based execution model, unlike systems such as **Twine**, which display the entire content of a passage at once. In Harrow, content is revealed step-by-step, following the flow of the story.
 
