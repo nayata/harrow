@@ -1,25 +1,48 @@
 # Introduction
 
-1) Content
+1) Text
 2) Choices
 3) Routes
 4) Variables
 5) Conditional blocks
 6) Branching
 7) Actions
-8) Events
 
+
+
+# Text
+
+The most basic **Harrow** script is just plain text written in a `.txt` file or a **Twine** `.twee` file. Each line of text creates a new paragraph.
+
+```
+The mouth of the cave yawns open, cold air curling out like breath. 
+Moss clings to the stones, and the scent of damp earth fills the air.
+```
+
+Character dialogue is written using the `:` symbol after the character's name:
+
+```
+Kaelen: We’re not turning back now.
+```
+
+Comments are marked using `//`.
+
+```
+// CaveEntrance
+
+You step forward, heart pounding.
+```
 
 
 # Variables
 
-Variables can be created using suuared braqets and `=` operator
+Variables are declared using square brackets and the `=` operator.
 
 ```
 [gold = 50]
 ```
 
-Variables can be numbers or strings:
+Variables can store numbers or strings.
 
 ```
 [quest = Find a lost princess.]
@@ -28,12 +51,17 @@ Variables can be numbers or strings:
 
 
 #### Random
+
+A variable can be assigned a random value:
+
 ```
 [dice roll 20]
 ```
 
 
 #### Variable operations
+
+Basic mathematical operations (`+`, `-`, `*`, and `/`) are supported. Other variables can be used in calculations.
 
 ```
 [damage = 20]
@@ -46,14 +74,14 @@ Variables can be numbers or strings:
 
 #### Printing variables
 
-The value of a variable can be printed in text using a squared braquets:
+The value of a variable can be displayed in text using square brackets.
 
 ```
 [gold = 50]
 You have [gold] gold coins.
 ```
 
-The value of a variable can be printed in choices too:
+Variables can also be shown inside choices.
 
 ```
 - I have [gold] gold coins.
@@ -64,7 +92,7 @@ The value of a variable can be printed in choices too:
 
 # Conditional blocks
 
-A simple 'if'
+A simple `if`.
 
 ```
 [torch.lit = true]
@@ -74,7 +102,7 @@ A simple 'if'
 [end]
 ```
 
-'if/else' condition
+`if/else` condition.
 
 ```
 [if torch.lit = true]
@@ -84,7 +112,7 @@ A simple 'if'
 [end]
 ```
 
-'chance' condition
+`chance` condition.
 
 ```
 [torch.lit = false]
