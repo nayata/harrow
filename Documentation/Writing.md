@@ -49,8 +49,8 @@ There are two types of actions:
 A choice may also be empty and simply continue the current flow.
 
 ```
-- Attack : damage = 20 // set damage to 20
-- Drink potion : Heal // move to route `Heal`
+- Attack : damage = 20
+- Drink potion : Heal
 - Wait
 ```
 
@@ -61,6 +61,43 @@ In this example:
 - The `Drink potion` choice uses an action to navigate to the `Heal` route.
 
 - The `Wait` choice has no action and continues the current flow.
+
+
+
+# Branching
+
+Branching in Harrow is done using `routes`, which are declared with the `#` symbol at the beginning of a line.
+Routes function similarly to `passages` in **Twine**.
+
+To move to a specific route, use an action in a choice or a move command:
+[move RouteName].
+
+Important: The story flow stops when a new route begins.
+An explicit action is required to transition into that route.
+
+#### Example
+
+Moving via choice:
+
+```
+The mouth of the cave yawns open, cold air curling out like breath.
+- Enter the cave : CaveInterior
+
+
+# CaveInterior
+You step into the cave. It's cold and silent.
+```
+
+Moving via command:
+
+```
+The mouth of the cave yawns open, cold air curling out like breath.
+[move CaveInterior]
+
+
+# CaveInterior
+You step into the cave. It's cold and silent.
+```
 
 
 
