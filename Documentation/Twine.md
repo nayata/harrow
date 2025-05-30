@@ -1,31 +1,25 @@
-# Introduction
+# Twine
 
 ![Twine](twine.png "Twine")
 
-**Harrow** uses a flow-based execution model, unlike systems such as **Twine**, which display the entire content of a passage at once. In Harrow, content is revealed step-by-step, following the flow of the story.
+**Twine** can be used as a visual editor for writing **Harrow** stories.
 
-Depending on the page type, the flow may automatically continue to the next page or pause, waiting for an external command to proceed.
+By using a custom Twine story `format.js`, scenes can be tested interactively and then exported as `.twee` files for use in Harrow.
 
+The format includes syntax highlighting and a toolbar for inserting common Harrow commands.
 
-# Before start
+Passage relationships are visualized through reference links. Classic Twine-style links using double square brackets are also supported and handled automatically by `harrow.twine.Parser`.
 
-Install the library from haxelib:
+To use the format, install it in Twine like any other custom format.
 
-```
-haxelib install harrow
-```
-
-Alternatively the dev version of the library can be installed from github:
+### Story format URL
 
 ```
-haxelib git harrow https://github.com/nayata/harrow.git
+https://nayata.github.io/format/format.js
 ```
 
-Include the library in your project's `.hxml`:
+### More information about Twine formats
 
-```
--lib harrow
-```
+* [Story Formats](https://twinery.org/reference/en/getting-started/basic-concepts.html#story-formats)
 
-
-See [Running](Running.md) for more information.
+* [Adding a Story Format](https://twinery.org/reference/en/story-formats/adding.html)
