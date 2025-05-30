@@ -1,12 +1,8 @@
 # Introduction
 
-1) Text
-2) Choices
-3) Branching
-4) Variables
-5) Conditional blocks
-6) Actions
-7) Events
+**Harrow** is a lightweight narrative runtime for building structured, interactive stories. It parses story scripts and executes them through a flow-based system.
+
+Stories consist of text, character dialogue, variables, choices, actions, events and conditional logic.
 
 
 
@@ -265,4 +261,4 @@ This mechanism allows for custom logic, UI updates, sound effects, or any extern
 [show image cave_entrance.png]
 ```
 
-Learn more about event handling in the `Running` section.
+See [Running](Running.md) for more information.
