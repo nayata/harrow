@@ -38,8 +38,7 @@ To execute a story in Harrow:
 
 ### Example
 
-
-```haxe
+```
 import harrow.Library;
 import harrow.Runtime;
 import harrow.Story;
@@ -65,5 +64,8 @@ class App extends hxd.App {
 }
 ```
 
+
+# Text
+...
 
 See [Twine as editor](Twine.md) for more information.
