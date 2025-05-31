@@ -26,4 +26,44 @@ Include the library in your project's `.hxml`:
 ```
 
 
-See [Running](Running.md) for more information.
+# Runtime
+
+To execute a story in Harrow:
+
+1. Load and parse the story file into a `harrow.Story` object using `harrow.Library`.
+
+2. Create a `harrow.Runtime` instance and pass the `Story` to it.
+
+3. Start the story flow by calling the `novel.nextPage()` function.
+
+### Example
+
+
+```haxe
+import harrow.Library;
+import harrow.Runtime;
+import harrow.Story;
+
+class App extends hxd.App {
+	var novel:Runtime;
+	var story:Story;
+
+	override function init() {
+		hxd.Res.initLocal();
+		
+		var entry = sys.io.File.getContent("res/story.txt");
+		
+		story = Library.get(entry);
+		novel = new Runtime(story);
+
+		novel.nextPage(); 
+	}
+
+	static function main() { 
+		new App(); 
+	}
+}
+```
+
+
+See [Twine as editor](Twine.md) for more information.
