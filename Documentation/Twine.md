@@ -18,6 +18,12 @@ To use the format, install it in Twine like any other custom format.
 https://nayata.github.io/format/format.js
 ```
 
+### Resources
+
+* [harrow-twine](https://github.com/nayata/harrow-twine) format repository.
+
+* [story.twee](https://github.com/nayata/harrow-twine/blob/main/example/story.twee) example story.
+ 
 ### More information about Twine formats
 
 * [Story Formats](https://twinery.org/reference/en/getting-started/basic-concepts.html#story-formats)

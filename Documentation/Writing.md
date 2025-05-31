@@ -68,7 +68,7 @@ Routes function similarly to `passages` in **Twine**.
 To move to a specific route, use an action in a choice or a move command:
 `[move RouteName]`.
 
-Important: The story flow stops when a new route begins.
+**Important:** The story flow stops when a new route begins.
 An explicit action is required to transition into that route.
 
 #### Example
@@ -108,7 +108,7 @@ Variables are declared using square brackets and the `=` operator.
 Variables can store numbers or strings.
 
 ```
-[quest = Find a lost princess.]
+[quest = Find the tomb of the forgotten king.]
 [quest.status = completed]
 ```
 
@@ -148,7 +148,7 @@ Variables can also be shown inside choices.
 
 ```
 - I have [gold] gold coins.
-- This is to much for this information.
+- This is too much for this information.
 ```
 
 
