@@ -32,7 +32,7 @@ To execute a story in Harrow:
 
 ### Example (using Heaps):
 
-```
+```haxe
 import harrow.Library;
 import harrow.Runtime;
 import harrow.Story;
@@ -123,7 +123,7 @@ Depending on the page type, the flow may automatically continue to the next page
 
 This can be done through UI interaction (e.g. clicking a "continue" button) or via keyboard events (e.g. pressing a key). This ensures the story only progresses when the user is ready.
 
-### Example:
+### Example (using button):
 
 ...
 
