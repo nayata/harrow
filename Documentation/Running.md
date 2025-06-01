@@ -103,6 +103,9 @@ After the player selects an option, pass the choice information to the runtime:
 novel.onChoice(choice.type, choice.data);
 ```
 
+
+See a [Heaps](https://github.com/nayata/harrow/blob/main/example/src/App.hx) and [HTML](https://github.com/nayata/harrow-twine/blob/main/src/App.hx) example.
+
 ...
 
 
