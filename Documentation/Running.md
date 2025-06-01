@@ -22,13 +22,15 @@ Include the library in your project's `.hxml`:
 
 # Runtime
 
-To execute a story in Harrow:
+To run a story in Harrow:
 
 1. Load and parse the story file into a `harrow.Story` object using `harrow.Library`.
 
 2. Create a `harrow.Runtime` instance and pass the `Story` to it.
 
-3. Start the story flow by calling the `novel.nextPage()` function.
+3. Assign your own functions—such as `onText`, `onDialogue`, and others—to the `harrow.Runtime` to define how the runtime interacts with your UI or systems.
+
+4. Start the story flow by calling the `novel.nextPage()` function.
 
 ### Example (using Heaps):
 
@@ -36,6 +38,7 @@ To execute a story in Harrow:
 import harrow.Library;
 import harrow.Runtime;
 import harrow.Story;
+import harrow.Choice;
 
 class App extends hxd.App {
 	var novel:Runtime;
@@ -49,60 +52,20 @@ class App extends hxd.App {
 		story = Library.get(entry);
 		novel = new Runtime(story);
 
-		novel.nextPage(); 
-	}
-
-	static function main() { 
-		new App(); 
-	}
-}
-```
-
-
-
-# Text
-
-To display text from a Harrow story:
-
-1. Create a text field or output area in your UI.
-2. Define a function that renders text content to that field.
-3. Assign this function to `onText(text, name)` in the `harrow.Runtime` instance.
-
-The `text` parameter contains the line to display, and `name` contains the speaker’s name if it is a line of dialogue.
-
-### Example:
-
-```haxe
-class App extends hxd.App {
-	var novel:Runtime;
-	var story:Story;
-
-	var label:h2d.Text;
-	var field:h2d.Text;
-
-	override function init() {
-		hxd.Res.initLocal();
-		
-		var entry = sys.io.File.getContent("res/story.txt");
-		
-		story = Library.get(entry);
-		novel = new Runtime(story);
-		
 		novel.onText = onText;
-
-		label = new h2d.Text(hxd.res.DefaultFont.get(), s2d);
-		label.textColor = 0xFFE600;
-
-		field = new h2d.Text(hxd.res.DefaultFont.get(), s2d);
-		field.textColor = 0xDDDDDD;
-		field.y = 32;
+		novel.onDialogue = onDialogue;
 
 		novel.nextPage(); 
 	}
 
 	function onText(text:String, name:String) {
-		label.text = name;
-		field.text = text;
+		trace(name, text);
+	}
+
+	function onDialogue(choices:Array<Choice>) {
+		for (choice in choices) {
+			trace(choice.text);
+		}
 	}
 
 	static function main() { 
@@ -119,12 +82,44 @@ class App extends hxd.App {
 
 Depending on the page type, the flow may automatically continue to the next page or pause, waiting for an external command to proceed.
 
-`Text` is one of the cases where user input is required to continue the story flow. 
+`Text` and `Dialogue` are cases where **user input is required** to continue the story flow.
 
-This can be done through UI interaction (e.g. clicking a "continue" button) or via keyboard events (e.g. pressing a key). This ensures the story only progresses when the user is ready.
+This can be handled through UI interactions or keyboard events. This ensures the story only progresses when the player is ready.
 
-### Example (using button):
+### Text
+
+After displaying the text content, the runtime waits for continuation. Once input is received, call:
+
+```haxe
+novel.nextPage();
+```
+
+### Dialogue (Choices)
+
+For choices, the runtime pauses and waits for choice input.
+After the player selects an option, pass the choice information to the runtime:
+
+```haxe
+novel.onChoice(choice.type, choice.data);
+```
 
 ...
+
+
+Story
+
+Page
+
+Storage
+
+Random
+
+Events
+
+Transition
+
+Close
+
+Format
 
 See [Twine as editor](Twine.md) for more information.
