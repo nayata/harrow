@@ -106,10 +106,41 @@ novel.onChoice(choice.type, choice.data);
 
 See a [Heaps](https://github.com/nayata/harrow/blob/main/example/src/App.hx) and [HTML](https://github.com/nayata/harrow-twine/blob/main/src/App.hx) example.
 
+
+
+# Story
+
+Instead of using a single large file, a story can be split across multiple files - for example, by chapters, quests, or locations.
+
+This approach not only improves organization but also helps with route naming:
+In a single file, all routes must have unique names, while in multiple files, common route names like `Init`, `Start`, or `Exit` can be safely reused.
+
+To load a specific part of the story during runtime, use the [action](https://github.com/nayata/harrow/blob/main/Documentation/Writing.md#actions):
+
+```
+[story storyName]
+```
+
+This triggers the `onStory(name)` function in the runtime.
+Connect a custom handler to `onStory` to load and play the corresponding story segment within the current runtime.
+
+```haxe
+novel.onStory = onStory;
+```
+
+
+```haxe
+function onStory(name:String) {
+	var entry = sys.io.File.getContent("res/" + name + ".txt");
+		
+	story = Library.get(entry);
+	novel.story = story;
+
+	novel.nextPage();
+}
+```
+
 ...
-
-
-Story
 
 Page
 
