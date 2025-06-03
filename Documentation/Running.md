@@ -2,19 +2,19 @@
 
 Install the library from haxelib:
 
-```
+```haxe
 haxelib install harrow
 ```
 
 Alternatively the dev version of the library can be installed from github:
 
-```
+```haxe
 haxelib git harrow https://github.com/nayata/harrow.git
 ```
 
 Include the library in your project's `.hxml`:
 
-```
+```haxe
 -lib harrow
 ```
 
@@ -141,6 +141,8 @@ function onStory(name:String) {
 ```
 
 ...
+
+Actions
 
 Page
 

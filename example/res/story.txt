@@ -7,28 +7,19 @@
 
 [hit = default]
 
+
 // First
-
-
-
-[title: Chapter One - Old town of Dremedor.]
-
 
 The sun has almost set by the time you arrive in the crumbling city of Dravenhold. 
 Shadows stretch long and sharp over the cracked cobblestones, and the air is heavy with decay. 
-[scene Slime]
 You are here for one purpose: to kill the monster.
 
-
-
--- move
-
+---
 
 A faint voice calls out, halting your steps.  
 
-- walk to beast nest : Enter Chirch
+- walk to beast nest : Church
 - aproach voice : Talk
-
 
 
 # Talk
@@ -37,34 +28,32 @@ Turning, you find a wounded city guard slumped against a wall, clutching a deep 
 “It’s fast,” he wheezes, blood dripping from his lips.
 “Too fast...” His eyes close as he slips into unconsciousness.
 
-[move Enter Chirch]
+[move Church]
 
 
-# Enter Chirch 
+# Church
 
 You press on toward the towering church at the center of the city. 
-The massive doors hang slightly ajar, and the scent of rot grows stronger with each step. 
----
 
+The massive doors hang slightly ajar, and the scent of rot grows stronger with each step. 
 You know the creature is inside.
 
 Before you reach the door, a low, guttural growl freezes you in place. 
 The monster emerges, hunched and bristling with unnatural rage.
 
----
 Its voice, a rasp of human words twisted by its transformation, chills you to the bone: “You will die here.” 
+
 In its yellowed eyes, you see a flicker of humanity - a soul begging to be freed. 
 You draw your weapon.
 
-
-- Get to the battle! : Battle
-
+[move Battle]
 
 
 # Battle
 
 Your health is [health] and you have [potions] potions. Weapon damage is [damage]. Monster health is [monster.health].
 
+[hit = default]
 
 [if potions > 0]
 	- Fast strike : hit = fast
@@ -74,7 +63,6 @@ Your health is [health] and you have [potions] potions. Weapon damage is [damage
 [else]
 	- Fast strike : hit = fast
 	- Heavy strike       
-
 [end]
 
 
@@ -120,18 +108,4 @@ Breathing heavily, you steady your hand for the final blow. With a precise strik
 The monster lets out a piercing howl, crumbling to the ground as the light in its eyes dims. The abomination is no more.
 You slay the beast!
 
-
-The church’s silence presses in as you step inside. Dust hangs in the air, thick with rot. Though the monster lies dead outside, something still pulls at your instincts - unfinished.
-
-The altar is broken, holy symbols defaced with strange carvings that seem to shift under your gaze. A faint rustling draws your ear - below.
-
-You find a trapdoor beneath a shattered pew and descend into the dark. The crypt beneath is lit by flickering, sickly light. Tombs lie open, their contents disturbed.
-
-A hooded figure stands at the center, its back to you. When it turns, its eyes glow faintly, and its voice is a whisper soaked in malice: “You shouldn’t have come here.”
-
-The earth shifts. Skeletal hands claw out of the ground. You cut down the first, but more rise. The figure begins to chant, red light pulsing from the symbols carved into its flesh.
-
-This wasn’t just a monster. It was the beginning of something far worse.
-
-With a battle cry, you charge toward the figure, determined to end this dark chapter before it begins.
-[end]
+[story church]
