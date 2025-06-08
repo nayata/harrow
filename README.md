@@ -56,5 +56,5 @@ You step forward, heart pounding.
 
 * [Writing](https://github.com/nayata/harrow/blob/main/Documentation/Writing.md)
 * [Running](https://github.com/nayata/harrow/blob/main/Documentation/Running.md)
-* [Twine as editor](https://github.com/nayata/harrow/blob/main/Documentation/Twine.md)
+* [Twine](https://github.com/nayata/harrow/blob/main/Documentation/Twine.md)
 

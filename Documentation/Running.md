@@ -140,22 +140,63 @@ function onStory(name:String) {
 }
 ```
 
+
+
+# Page
+
+The `onPage(page)` function is called by the runtime at the **very beginning** of each page flow - before any other events such as `onText`, `onChoice`, or actions.
+
+It can be used for custom page-level processing or to override default behavior.
+
+For example, it can be used to implement custom formatting for variables in the page text — since variable substitution is handled later during the `onText` call.
+
+Example:
+
+```haxe
+novel.onPage = onPage;
+```
+
+
+```haxe
+function onPage(page:Page) {
+	switch (page.type) {
+		case Page.TEXT : 
+			button.visible = true;
+			var text = format(page.text);
+			textbox.text = text;
+		default:
+	}
+}
+```
+
+```haxe
+function format(entry:String):String {
+	var rex:EReg = ~/\[(.*?)\]/gi;
+
+	entry = rex.map(entry, function(r) {
+		var matching = r.matched(0);
+		var variable = matching.substring(1, matching.length-1);
+
+		if (harrow.Storage.has(variable)) return "[[" + harrow.Storage.get(variable) + "]]";
+		return matching;
+	});
+
+	return entry;
+}
+```
+
 ...
 
-Actions
+story page actions + close/lock + scene event
+transition
+events
 
-Page
-
-Storage
-
-Random
-
-Events
+...
 
 Transition
-
 Close
+Events
+Storage
+Random
 
-Format
-
-See [Twine as editor](Twine.md) for more information.
+See [Twine](Twine.md) for more information.
