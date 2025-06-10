@@ -189,8 +189,6 @@ function format(entry:String):String {
 
 # Events
 
-Events provide a simple syntax for executing external logic during the story flow. They are useful for controlling visual content, triggering sound effects, or performing gameplay actions.
-
 Events provide a simple syntax for executing external logic during the story flow. They allow integration of visual updates, sound playback, or game-specific systems without modifying the runtime.
 
 To define a custom event in a story, use square brackets - avoiding reserved keywords used for **actions**, **conditions**, or **variables**.
@@ -240,12 +238,6 @@ function onEvent(type:String, data:String) {
 `onEvent` can act as a hub, routing data to the appropriate class. See examples in App.hx and Prefab.hx.
 
 Events automatically advance the flow to the next page after execution.
-
-...
-
-story page actions + close/lock + scene event
-transition
-events
 
 ...
 
