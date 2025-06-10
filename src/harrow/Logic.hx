@@ -1,9 +1,6 @@
 package harrow;
 
 class Logic {
-	public static var random:Random = new Random();
-
-
 	public static function variable(entry:String) {
 		var key = entry.split(Library.KEY);
 
@@ -35,17 +32,16 @@ class Logic {
 
 				set(name, Std.string(a / b));
 			case "chance":
-				var prob = random.chance(get(prop));
+				var prob = Random.chance(get(prop));
 
 				set(name, Std.string(prob));
 			case "roll":
-				var roll = random.dice(get(prop));
+				var roll = Random.dice(get(prop));
 
 				set(name, Std.string(roll));
 			default:
 		}
 	}
-
 
 	public static function condition(entry:String):Bool {
 		if (entry == "else") return false;
@@ -84,13 +80,12 @@ class Logic {
 
 				result = a > b;
 			case "chance":
-				result = random.chance(get(prop));
+				result = Random.chance(get(prop));
 			default:
 		}
 		
 		return result;
 	}
-
 
 	static function get(entry:String):String {
 		if (entry == "false" || entry == "true") return entry;
@@ -99,11 +94,9 @@ class Logic {
 		return entry;
 	}
 
-
 	static function set(entry:String, value:String) {
 		Storage.set(entry, value);
 	}
-
 
 	static inline function float(entry:String):Float {
 		return Std.parseFloat(get(entry));

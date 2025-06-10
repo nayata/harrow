@@ -18,7 +18,7 @@ Hunt
 
 [weapon.roll = 2d20]
 
-[monster.health = 10]
+[monster.health = 50]
 [monster.type = fast]
 
 

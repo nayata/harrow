@@ -17,11 +17,15 @@ class Format {
 		return entry;
 	}
 
-	public static function from(entry:String):String {
+	public static function string(entry:String):String {
 		return StringTools.replace(entry, Library.KEY, Library.SPACE);
 	}
 
-	public static function to(entry:String):String {
-		return StringTools.replace(entry, Library.SPACE, Library.KEY);
+	public static function from(entry:String):Array<String> {
+		return entry.split(Library.KEY);
+	}
+
+	public static function to(entry:Array<String>):String {
+		return entry.join(Library.KEY);
 	}
 }

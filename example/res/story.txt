@@ -8,43 +8,76 @@
 [hit = default]
 
 
-// First
+// Scene
 
-The sun has almost set by the time you arrive in the crumbling city of Dravenhold. 
-Shadows stretch long and sharp over the cracked cobblestones, and the air is heavy with decay. 
-You are here for one purpose: to kill the monster.
+[add bgd]
+[bgd image background.png]
 
----
+[add cgi]
+[cgi image character.png]
 
-A faint voice calls out, halting your steps.  
+[cgi property x 128]
+[cgi property y 194]
 
-- walk to beast nest : Church
-- aproach voice : Talk
-
-
-# Talk
-
-Turning, you find a wounded city guard slumped against a wall, clutching a deep wound in his side. 
-“It’s fast,” he wheezes, blood dripping from his lips.
-“Too fast...” His eyes close as he slips into unconsciousness.
-
-[move Church]
+[cgi property alpha 0]
 
 
-# Church
+// Start
 
-You press on toward the towering church at the center of the city. 
+The sky bleeds red as you and Kael cross the broken gates of Dravenhold.
+Wind howls through empty alleys, carrying the scent of blood and mildew.
+The city is silent - not with peace, but with something holding its breath.
 
-The massive doors hang slightly ajar, and the scent of rot grows stronger with each step. 
-You know the creature is inside.
+[cgi slide in]
 
-Before you reach the door, a low, guttural growl freezes you in place. 
-The monster emerges, hunched and bristling with unnatural rage.
+Kael: "Place gives me the creeps. Smells like death wrapped in mold."
+Kael: "Whatever did this to the city... it's still here."
+Kael: "I’ve got a bad feeling we’ll find it before long."
 
-Its voice, a rasp of human words twisted by its transformation, chills you to the bone: “You will die here.” 
+[cgi slide out]
 
-In its yellowed eyes, you see a flicker of humanity - a soul begging to be freed. 
-You draw your weapon.
+
+
+[transition]
+[bgd image landscape.png]
+[textbox clear]
+
+
+You pass shattered windows and charred doorframes. Every step echoes like a warning.
+At the heart of the ruins, a cathedral looms - blackened with soot, its spire cracked like a broken fang.
+
+[cgi slide in]
+
+Kael: "The church. Always the church. Why is it always the damn church?"
+You: "Because that’s where monsters like to nest... where the prayers die first."
+Kael: "Heh. Grim. I like it."
+
+[cgi slide out]
+
+As you approach the grand entrance, the stench intensifies - rancid and wet.
+The heavy doors creak open on their own, revealing a dark maw within.
+
+From the shadows, a hulking creature lumbers forward - its form twisted by corruption, limbs too long, eyes glowing faintly with a desperate sorrow.
+Its voice, warped and gurgling, rumbles out like a curse - “You will die here.”
+
+[cgi slide in]
+
+Kael: "You hear that? It remembers. Whatever it once was... it's still in there."
+You: "Then let's end its suffering."
+
+[cgi slide out]
+
+Steel sings as you draw your weapon, stepping into the cathedral’s dying light.
+
+// Enemy
+[add enemy]
+[enemy image battle.png]
+
+[enemy property x 426]
+[enemy property y 194]
+
+[enemy property alpha 0]
+[enemy slide in]
 
 [move Battle]
 
@@ -69,15 +102,13 @@ Your health is [health] and you have [potions] potions. Weapon damage is [damage
 // Hit result
 
 [if hit = fast]
-	[damage roll 30]
+	[damage roll 20]
 	[monster.health - damage]
 
 	The strike connects, your blade carving into its thick hide with a spray of black ichor.
 	You hit the beast with [damage] damage.
 [else]
-	You miss!
-
-	The beast is quick. It lunges, and your next swing cuts only empty air.
+	You miss! The beast is quick. It lunges, and your next swing cuts only empty air.
 [end]
 
 
@@ -104,8 +135,20 @@ You drink healing potion.
 
 # Victory
 
-Breathing heavily, you steady your hand for the final blow. With a precise strike, you pierce its chest. 
-The monster lets out a piercing howl, crumbling to the ground as the light in its eyes dims. The abomination is no more.
-You slay the beast!
+[enemy slide out]
+
+The creature stumbles, weakened, its breath ragged. You seize the moment.
+With one final thrust, you drive your blade into its chest. It lets out a strangled scream, then collapses, twitching.
+The glow in its eyes fades to nothing.
+
+[cgi slide in]
+
+Kael: "It’s done. Poor soul."
+Kael: "It can rest now."
+Kael: "Let’s hope it’s the last. But something tells me it’s not."
+
+[cgi slide out]
+
+You wipe your blade clean, heart still pounding. One monster down - but the night is far from over.
 
 [story church]

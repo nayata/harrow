@@ -3,7 +3,7 @@ class Prefab extends h2d.Object {
 
 	
 	public function event(entry:String) {
-		var data = entry.split(":");
+		var data = harrow.Format.from(entry);
 		var type = data.shift();
 
 		var name = data[0];
@@ -14,6 +14,13 @@ class Prefab extends h2d.Object {
 				visible = true;
 			case "hide": 
 				visible = false;
+
+			case "slide":
+				var position = name == "in" ? 32 : -32;
+				var opacity = name == "in" ? 1 : 0;
+
+				App.ME.tween.add(this.alpha, opacity, 3);
+				App.ME.tween.add(this.x, x + position, 3);
 
 			case "prop": 
 				Reflect.setProperty(this, name, Std.parseFloat(prop));

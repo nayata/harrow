@@ -1,6 +1,5 @@
 import harrow.Library;
 import harrow.Runtime;
-import harrow.Logic;
 import harrow.Story;
 import harrow.Choice;
 import harrow.Page;
@@ -38,7 +37,8 @@ class App extends hxd.App {
 		hxd.Res.initLocal();
 
 		// Set custom random to `Logic.random`
-		Logic.random = new Dice();
+		var dice = new Dice();
+		harrow.Random.dice = dice.roll;
 
 		// Don't parse speaker(name: text from character)
 		Library.parseSpeaker = false;
