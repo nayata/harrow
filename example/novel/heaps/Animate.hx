@@ -4,8 +4,8 @@ import haxe.macro.Expr;
 
 
 class Animate {
-	var array:Array<Tween> = [];
-	var stack:Array<Call> = [];
+	var animate:Array<Tween> = [];
+	var process:Array<Trait> = [];
 	var fps:Float = 60;
 
 
@@ -14,11 +14,20 @@ class Animate {
 	}
 
 
-	public function set(target:Dynamic, property:String, to:Float, time:Float, ?ease:String = "linear", ?delay:Float = 0):Tween {
-		var tween:Tween = new Tween();
+	/**
+		Add a tween to animate a specific property of a target object over time.
+		@param target The object whose property you want to animate.
+		@param property The name of the property to animate on the target object.
+		@param to The final value the property should animate to.
+		@param time Duration of the tween.
+		@param easing (Optional) Easing function to control the animation curve. See `heaps.Easing` for available options.
+		@param delay (Optional) Delay before the tween starts.
+	*/
+	public function set(target:Dynamic, property:String, to:Float, time:Float, ?easing:String = "linear", ?delay:Float = 0):Tween {
+		var tween = new Tween();
 
 		tween.target = target;
-		tween.ease = heaps.Easing.get(ease);
+		tween.ease = heaps.Easing.get(easing);
 
 		tween.time = 0;
 		tween.step = 0;
@@ -34,27 +43,25 @@ class Animate {
 
 		if (delay == 0) terminate(tween.target, tween.setter);
 
-		array.push(tween);
+		animate.push(tween);
 
 		return tween;
 	}
 
 	
 	/**
-		Add tween.
-
-		[Tween Parameters]
-		- `target.property`: The target and property to animate.
-		- `to`: The value to animate to.
-		- `time`: The duration of the tween.
-		- `ease`: The easing function for the tween — `heaps.Easing`.
-		- `delay`: Optional delay before the tween starts.
-	**/
-	public macro function add(ethis:Expr, field:ExprOf<Dynamic>, to:ExprOf<Float>, time:ExprOf<Float>, ?eExpr:ExprOf<String>, ?dExpr:ExprOf<Float>) {
+		A shorter `macro` alternative to `Animate.set` for adding tweens.
+		@param field The target and property to animate (e.g., `object.alpha`).
+		@param to The final value the property should animate to.
+		@param time Duration of the tween.
+		@param easing (Optional) Easing function to control the animation curve. See `heaps.Easing` for available options.
+		@param delay (Optional) Delay before the tween starts.
+	*/
+	public macro function add(field:Expr, ethis:ExprOf<Dynamic>, to:ExprOf<Float>, time:ExprOf<Float>, ?easing:ExprOf<String>, ?delay:ExprOf<Float>) {
 		var target;
 		var setter;
 
-		switch field.expr {
+		switch ethis.expr {
 			case EField(e, f) : 
 				target = e; 
 				setter = f;
@@ -63,57 +70,61 @@ class Animate {
 		}
 
 		var ease = macro "linear";
-		var delay = macro 0;
+		var wait = macro 0;
 
-		switch(eExpr.expr) {
-			case EConst(CString(v)) : ease = eExpr;
-			case EConst(CFloat(v)) : delay = eExpr;
-			case EConst(CInt(v)) : delay = eExpr;
-			default : ease = eExpr;
+		switch(easing.expr) {
+			case EConst(CString(v)) : ease = easing;
+			case EConst(CFloat(v)) : wait = easing;
+			case EConst(CInt(v)) : wait = easing;
+			default : ease = easing;
 		}
-		switch(dExpr.expr) {
+		switch(delay.expr) {
 			case EConst(CIdent("null")) : 
-			default : delay = dExpr;
+			default : wait = delay;
 		}
 	
-		return macro $ethis.set($target, $v{setter}, $to, $time, $ease, $delay);
+		return macro $field.set($target, $v{setter}, $to, $time, $ease, $wait);
 	}
 
 
-	// Delayed call
-	public function call(complete:Void->Void, time:Float):Call {
-		var tween = new Call();
+	/**
+		Call a function after a specified delay.
+		@param complete The function to be executed after the delay.
+		@param time The delay duration before the function is called.
+	**/
+	public function call(complete:Void->Void, time:Float):Trait {
+		var trait = new Trait();
 
-		tween.time = time * fps/1000;
-		tween.complete = complete;
-		tween.done = false;
+		trait.time = time * fps/1000;
+		trait.complete = complete;
+		trait.done = false;
 
-		stack.push(tween);
+		process.push(trait);
 
-		return tween;
+		return trait;
 	}
 
 
 	public function update(delta:Float) {
-		for (tween in array) {
+		for (tween in animate) {
 			tween.update(delta);
 		}
-		for (tween in array) {
-			if (tween.done) array.remove(tween);
+		for (tween in animate) {
+			if (tween.done) animate.remove(tween);
 		}
 
-		for (call in stack) {
-			call.update(delta);
+		for (trait in process) {
+			trait.update(delta);
 		}
-		for (call in stack) {
-			if (call.done) stack.remove(call);
+		for (trait in process) {
+			if (trait.done) process.remove(trait);
 		}
 	}
 
 
 	/** Count all working tweens. **/
 	public function count() {
-		return array.length;
+		return animate.length;
 	}
 
 
@@ -122,25 +133,26 @@ class Animate {
 		The exception is tweens with a delay. 
 	**/
 	function terminate(target:Dynamic, setter:String) { 
-		if (array == null) return;
+		if (animate == null) return;
 
-		for (tween in array) {
+		for (tween in animate) {
 			if (tween.done) continue;
-			if (tween.target == target && tween.setter == setter) array.remove(tween);
+			if (tween.target == target && tween.setter == setter) animate.remove(tween);
 		}
 	}
 
 
 	/** Remove all tweens for the target. **/
 	public function remove(target:Dynamic) {
-		for (tween in array) {
+		for (tween in animate) {
 			if (tween.target == target) tween.done = true; 
 		}
 	}
 
 
 	public function dispose() {
-		array = null;
+		animate = null;
+		process = null;
 	}
 }
 
@@ -153,6 +165,7 @@ class Tween {
 	public var to:Float;
 	
 	public var ease:Float->Float;
+
 	public var time:Float;
 	public var speed:Float;
 	public var delay:Float;
@@ -226,7 +239,7 @@ class Tween {
 }
 
 
-class Call {
+class Trait {
 	public var complete:Void->Void;
 	public var time:Float;
 	public var done:Bool;
