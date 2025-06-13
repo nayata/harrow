@@ -1,0 +1,91 @@
+:: StoryTitle
+Game
+
+
+:: StoryData
+{
+  "ifid": "5F130358-5FA9-4A66-9518-340FC63DE338",
+  "format": "Harrow",
+  "format-version": "1.0.0",
+  "start": "Start",
+  "zoom": 1
+}
+
+
+:: Battle {"position":"500,350","size":"100,100"}
+[boss.defeated = true]
+...You easily defeated the Boss!
+[close]
+
+
+:: Boss {"position":"350,350","size":"100,100"}
+[if boss.defeated = true]
+	boss: You again?!
+	boss: Go away!
+	[close]
+[end]
+
+boss: Hello, foolish mortal! How's your day?
+
+[if sword <= 0]
+	boss: You want to fight me? But you don’t even have a weapon!
+	boss: I refuse! That would be too unfair for you.
+
+	[close]
+[else]
+	boss: You have a fine sword - let’s begin!
+	[move Battle]
+[end]
+
+
+:: Item {"position":"200,200","size":"100,100"}
+You found a sword!
+Do you want to take it?
+
+- Take : Take
+- Leave
+
+[close]
+
+
+:: NPC {"position":"50,350","size":"100,100"}
+npc: I've been standing here for so long.
+npc: No one wants to fight the Boss!
+
+[if sword > 0]
+	npc: You have a sword - maybe you should give it a try?
+[end]
+
+[if boss.defeated = true]
+	Long story short...
+
+	npc: What? The Boss is defeated?!
+	npc: What a shame!
+[end]
+
+[close]
+
+
+:: Start {"position":"200,500","size":"100,100"}
+[boss.defeated = false]
+[sword = 0]
+
+Use WASD to move.  
+Pick up items. Talk to NPCs or...  
+walk to the Boss!
+
+[close]
+
+
+:: Take {"position":"200,50","size":"100,100"}
+[sword + 1]
+
+You taked a sword!
+
+[if sword > 1]
+	Now you have [sword] swords.
+[else]
+	Now you have a sword.
+[end]
+
+[close]
