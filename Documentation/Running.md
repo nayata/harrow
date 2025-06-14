@@ -210,6 +210,10 @@ For events with more parts `[button property x 64]`, the `data` string should be
 ### Example:
 
 ```haxe
+import harrow.Format;
+
+...
+
 novel.onEvent = onEvent;
 ```
 
@@ -235,7 +239,7 @@ function onEvent(type:String, data:String) {
 }
 ```
 
-`onEvent` can act as a hub, routing data to the appropriate class. See examples in App.hx and Prefab.hx.
+`onEvent` can act as a hub, routing data to the appropriate class. See `App.hx` and `Prefab.hx` in [examples](https://github.com/nayata/harrow/tree/main/example).
 
 Events automatically advance the flow to the next page after execution.
 
