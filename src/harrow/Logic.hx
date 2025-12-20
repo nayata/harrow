@@ -87,6 +87,13 @@ class Logic {
 		return result;
 	}
 
+	static inline function float(entry:String):Float {
+		var number = Std.parseFloat(get(entry));
+		if (Math.isNaN(number)) throw('Invalid input format: "${entry}". Expected: number');
+
+		return number;
+	}
+
 	static function get(entry:String):String {
 		if (entry == "false" || entry == "true") return entry;
 		if (Storage.has(entry)) return Storage.get(entry);
@@ -96,9 +103,5 @@ class Logic {
 
 	static function set(entry:String, value:String) {
 		Storage.set(entry, value);
-	}
-
-	static inline function float(entry:String):Float {
-		return Std.parseFloat(get(entry));
 	}
 }
