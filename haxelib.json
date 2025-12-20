@@ -4,7 +4,7 @@
 	"license": "MIT",
 	"tags": ["Haxe","Heaps","Twine","narrative","story"],
 	"description": "Harrow is a custom syntax, a parsing library, and a runtime for narrative-driven games - https://github.com/nayata/harrow",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"classPath": "src/",
 	"releasenote": "See https://github.com/nayata/harrow for more information",
 	"contributors": ["nayata"]
