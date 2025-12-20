@@ -182,7 +182,7 @@ class App extends hxd.App {
 
 	// harrow.Runtime events
 	function onPage(page:Page) {}
-	function onTransition() {}
+	function onTransition(name:String) {}
 	function onClose() {}
 	function onEnd() {}
 

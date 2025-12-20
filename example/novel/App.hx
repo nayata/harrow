@@ -145,7 +145,7 @@ class App extends hxd.App {
 
 
 	// Transition
-	function onTransition() {
+	function onTransition(name:String) {
 		function fade() {
 			tween.add(transition.alpha, 0, 6, 6);
 			tween.call(novel.nextPage, 6);
