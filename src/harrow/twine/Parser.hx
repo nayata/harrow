@@ -75,7 +75,7 @@ class Parser {
 			story.data.push(route);
 			
 			// Parse Passage
-			var res = text.split(Library.LF);
+			var res = text.split("\n");
 
 			// Replace Twine links
 			for (i in 0...res.length) {
@@ -98,26 +98,21 @@ class Parser {
 			}
 
 			// Parse Passage content
-			var line:Int = 0;
+			var last:Null<Page> = null;
+
+			for (line in res) {
+				var page = Library.parse(line);
+				var skip = Library.merge(page, last);
+
+				if (page == null) last = null;
+				if (page == null) skip = true;
 	
-			while (line < res.length) {
-				var node = Library.getNode(res, line);
-				
-				if (node != null && node.type != Library.EMPTY) {
-					var page = new Page();
-	
-					page.type = node.type;
-					page.text = node.text;
-					page.data = node.data;
-	
+				if (skip == false) {
 					story.data.push(page);
-	
-					line += node.depth;
+					last = page;
 				}
-				line++;
 			}
 		}
-		
 		
 		// Move 'Story.page' to StoryData 'start' value
 		story.move(start);
@@ -125,5 +120,4 @@ class Parser {
 		// Return harrow.Story.
 		return story;
 	}
-
 }
