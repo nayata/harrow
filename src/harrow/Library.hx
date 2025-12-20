@@ -2,7 +2,6 @@ package harrow;
 
 class Library {
 	public static var SPACE:String = " ";
-	public static var COLON:String = "::";
 	public static var LINE:String = "|";
 	public static var ITEM:String = "::";
 	public static var COMA:String = ",";
@@ -10,7 +9,7 @@ class Library {
 	public static var DASH:String = "-";
 	public static var KEY:String = ":";
 
-	public static var parseSpeaker:Bool = true;
+	public static var colonEscape:String = "::";
 
 	static var TYPE:Int = 0;
 	static var TEXT:Int = 1;
@@ -38,6 +37,7 @@ class Library {
 		}
 
 		if (validate) Syntax.validate(story);
+
 		return story;
 	}
 
@@ -82,14 +82,12 @@ class Library {
 
 
 	static function getText(page:Page, entry:String) {
-		var raw = StringTools.replace(entry, COLON, LINE);
+		var raw = StringTools.replace(entry, colonEscape, LINE);
 		var key = raw.split(KEY);
 
 		page.text = StringTools.trim(key.pop());
 		page.text = StringTools.replace(page.text, LINE, KEY);
 		page.data = key.length > 0 ? StringTools.trim(key[TYPE]) : "";
-
-		if (!parseSpeaker) page.text = entry;
 	}
 
 
