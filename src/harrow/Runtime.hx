@@ -29,7 +29,9 @@ class Runtime {
 				onDialogue(dialogue);
 			
 			case Page.ROUTE : 
-			case Page.BREAK : nextPage();
+				if (page.data == "label") nextPage();
+			case Page.BREAK : 
+				nextPage();
 			
 			case Page.MOVE : 
 				if (page.data == "story") onStory(page.text);
@@ -60,9 +62,7 @@ class Runtime {
 				var time = Std.parseInt(page.text);
 				haxe.Timer.delay(nextPage, time * 60);
 			case "transition":
-				onTransition();
-			case "scene":
-				onEvent(page.data, page.text);
+				onTransition(page.text);
 			default:
 				onEvent(page.data, page.text);
 				nextPage();
@@ -82,8 +82,8 @@ class Runtime {
 	public dynamic function onDialogue(dialogue:Array<Choice>) {}
 	public dynamic function onEvent(type:String, data:String) {}
 
-	public dynamic function onTransition() {}
-
+	public dynamic function onTransition(name:String) {}
+	
 	public dynamic function onStory(name:String) {}
 	public dynamic function onClose() {}
 	public dynamic function onEnd() {}

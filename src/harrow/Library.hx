@@ -1,14 +1,12 @@
 package harrow;
 
 class Library {
-	public static var LF:String = "\n";
-
-	public static var EMPTY:String = "";
 	public static var SPACE:String = " ";
 	public static var COLON:String = "::";
 	public static var LINE:String = "|";
 	public static var ITEM:String = "::";
 	public static var COMA:String = ",";
+	public static var HASH:String = "#";
 	public static var DASH:String = "-";
 	public static var KEY:String = ":";
 
@@ -18,140 +16,106 @@ class Library {
 	static var TEXT:Int = 1;
 	static var DATA:Int = 2;
 	static var PROP:Int = 3;
-	
 
-	public static function get(entry:String):Story {
-		// LF character : 'Line Feed' or 'Newline Character'
-		var res = entry.split(LF);
+
+	public static function get(entry:String, validate:Bool = true):Story {
+		var res = entry.split("\n");
 
 		var story = new Story();
-		var line:Int = 0;
+		var last:Null<Page> = null;
 
-		while (line < res.length) {
-			var node = getNode(res, line);
-			
-			if (node != null && node.type != EMPTY) {
-				var page = new Page();
+		for (line in res) {
+			var page = parse(line);
+			var skip = merge(page, last);
 
-				page.type = node.type;
-				page.text = node.text;
-				page.data = node.data;
+			if (page == null) last = null;
+			if (page == null) skip = true;
 
+			if (skip == false) {
 				story.data.push(page);
-
-				line += node.depth;
+				last = page;
 			}
-			line++;
 		}
 
+		if (validate) Syntax.validate(story);
 		return story;
 	}
 
 
-	public static function getNode(res:Array<String>, page:Int):Null<Node> {
-		var string = StringTools.trim(res[page]);
-		if (string.length == 0) return null;
+	public static function parse(entry:String):Null<Page> {
+		var string = StringTools.trim(entry);
 
-		var node = new Node();
-		var type = Page.TEXT;
+		if (string.length == 0) return null;
+		if (string.substring(0, 1) == "/") return null;
+
+		var page = new Page();
+		page.type = Page.TEXT;
 
 		var leading = string.substring(0, 1);
 
-		if (leading == "#") type = Page.ROUTE;
-		if (leading == "-") type = Page.DIALOGUE;
-		if (leading == "[") type = isEvent(string);
-		if (leading == "/") type = EMPTY;
+		if (leading == "#") page.type = Page.ROUTE;
+		if (leading == "-") page.type = Page.DIALOGUE;
+		if (leading == "[") page.type = isEvent(string);
 
-		if (isBreak(string)) type = Page.BREAK;
+		if (isBreak(string)) page.type = Page.BREAK;
 		
-		node.type = type;
-
-		if (type == Page.TEXT) {
-			getText(node, string);
+		switch (page.type) {
+			case Page.TEXT: getText(page, string);
+			case Page.ROUTE: getRoute(page, string);
+			case Page.DIALOGUE: getDialogue(page, string);
+			case Page.EVENT: getEvent(page, string);
+			default:
 		}
 
-		if (type == Page.ROUTE) {
-			var route = StringTools.replace(string, "#", "");
-			node.text = StringTools.trim(route);
-		}
-		
-		if (type == Page.DIALOGUE) {
-			getDialogue(node, res, page);
-		}
-		
-		if (type == Page.EVENT) {
-			getEvent(node, string);
-		}
-
-		return node;
+		return page;
 	}
 
 
-	static function getText(node:Node, res:String) {
-		var raw = StringTools.replace(res, COLON, LINE);
+	public static function merge(page:Page, last:Page):Bool {
+		if (page != null && page.type == Page.DIALOGUE && last != null && last.type == Page.DIALOGUE) {
+			last.text = last.text + LINE + page.text;
+			last.data = "dialogue";
+			return true;
+		}
+		return false;
+	}
+
+
+	static function getText(page:Page, entry:String) {
+		var raw = StringTools.replace(entry, COLON, LINE);
 		var key = raw.split(KEY);
 
-		node.text = StringTools.trim(key.pop());
-		node.text = StringTools.replace(node.text, LINE, KEY);
-		node.data = key.length > 0 ? StringTools.trim(key[TYPE]) : "";
+		page.text = StringTools.trim(key.pop());
+		page.text = StringTools.replace(page.text, LINE, KEY);
+		page.data = key.length > 0 ? StringTools.trim(key[TYPE]) : "";
 
-		if (!parseSpeaker) node.text = res;
+		if (!parseSpeaker) page.text = entry;
 	}
 
 
-	static function getDialogue(node:Node, res:Array<String>, indent:Int) {
-		var dialogue:Array<String> = [];
-		
-		for (page in indent...res.length) {
-			var sampled = StringTools.trim(res[page]);
-			
-			var allowed = sampled.substring(0, 2) != DASH+DASH;
-			var leading = sampled.substring(0, 1);
+	static function getRoute(page:Page, entry:String) {
+		var locked = entry.substring(0, 2) != HASH + HASH;
 
-			if (leading == DASH && allowed) {
-				dialogue.push(res[page]);
-			}
-			else {
-				break;
-			}
-		}
-		
-		var content = "";
-		var string = "";
-		
-		for (i in 0...dialogue.length) {
-			string = dialogue[i];
-			
-			string = StringTools.replace(string, DASH, "");
-			string = getDialogueItem(string);
-			
-			var divider = LINE;
-			if (i == dialogue.length - 1) divider = "";
-			
-			content = content + string + divider;
-		}
-		
-		node.text = content;
-		node.data = dialogue.length == 1 ? "button" : "dialogue";
-		node.depth = dialogue.length - 1;
+		page.text = StringTools.trim(StringTools.replace(entry, HASH, ""));
+		page.data = locked ? "route" : "label";
 	}
 
 
-	static function getDialogueItem(res:String):String {
+	static function getDialogue(page:Page, entry:String) {
+		var res = StringTools.replace(entry, DASH, "");
 		var key = res.split(KEY);
 				
 		var text = StringTools.trim(key[TYPE]);
 		var type = "empty";
 		var data = "empty";
 		var mode = "empty";
-		var role = "empty";
 		
 		if (key.length > 1) {
 			var string = StringTools.trim(key[TEXT]);
 			string = StringTools.replace(string, SPACE, KEY);
 			
 			var prop = string.split(KEY);
-			
+
 			if (isVariable(prop[TEXT])) {
 				type = "variable";
 				data = string;
@@ -161,23 +125,18 @@ class Library {
 				data = StringTools.trim(key[TEXT]);
 			}
 		}
-
-		// Get `mode` and `role`
 		if (key.length > 2) {
 			mode = StringTools.trim(key[DATA]);
 			mode = StringTools.replace(mode, SPACE, KEY);
 		}
-		if (key.length > 3) {
-			role = StringTools.trim(key[PROP]);
-			role = StringTools.replace(role, SPACE, KEY);
-		}
 		
-		return text + ITEM + type + ITEM + data + ITEM + mode + ITEM + role;
+		page.text = text + ITEM + type + ITEM + data + ITEM + mode;
+		page.data = "button";
 	}
 
 
-	static function getEvent(node:Node, res:String) {
-		var string = res.substring(1, res.length-1);
+	static function getEvent(page:Page, entry:String) {
+		var string = entry.substring(1, entry.length-1);
 		string = StringTools.trim(string);
 		
 		string = StringTools.replace(string, COMA + SPACE, COMA);
@@ -187,47 +146,34 @@ class Library {
 		var key = string.split(KEY);
 		var type = key[TYPE];
 		
-		node.type = Page.EVENT;
-		node.text = StringTools.replace(string, type + ":", "");
-		node.data = type;
+		page.type = Page.EVENT;
+		page.text = StringTools.replace(string, type + ":", "");
+		page.data = type;
 		
-		if (type == "move") {
-			node.type = Page.MOVE;
-			node.text = StringTools.replace(string, "move:", "");
-			node.text = StringTools.replace(node.text, KEY, SPACE);
+		if (type == "story" || type == "move") {
+			page.type = Page.MOVE;
+			page.text = StringTools.replace(page.text, KEY, SPACE);
 		}
-
-		if (type == "story") {
-			node.type = Page.MOVE;
-			node.text = StringTools.replace(string, "story:", "");
-			node.text = StringTools.replace(node.text, KEY, SPACE);
-		}
-
 		if (type == "lock" || type == "close") {
-			node.type = Page.MOVE;
-			node.text = type;
+			page.type = Page.MOVE;
 		}
-
 		if (type == "if") {
-			node.type = Page.CONDITION;
-			node.text = StringTools.replace(string, "if:", "");
+			page.type = Page.CONDITION;
+			page.text = StringTools.replace(string, "if:", "");
 		}
-
 		if (type == "else" || type == "end") {
-			node.type = Page.CONDITION;
-			node.text = type;
+			page.type = Page.CONDITION;
+			page.text = type;
 		}
-
 		if (isVariable(key[TEXT])) {
-			node.type = Page.VARIABLE;
-			node.text = string;
+			page.type = Page.VARIABLE;
+			page.text = string;
 		}
 	}
 
 
 	static function isBreak(entry:String):Bool {
-		var leading = entry.substring(0, 2);
-		if (leading == DASH+DASH) return true;
+		if (entry.length >= 2 && entry.substring(0, 2) == DASH + DASH) return true;
 		return false;
 	}
 
@@ -243,14 +189,4 @@ class Library {
 		if (entry == "is" || entry == "roll" || entry == "chance") return true;
 		return false;
 	}
-}
-
-
-class Node {
-	public var type:String = "";
-	public var text:String = "";
-	public var data:String = "";
-	public var depth:Int = 0;
-
-	public function new() {}
 }
