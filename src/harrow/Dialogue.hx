@@ -9,12 +9,11 @@ class Dialogue {
 			var key = map[i].split(Library.ITEM);
 
 			var choice = new Choice();
-
+			
 			choice.text = key[0];
 			choice.type = key[1];
 			choice.data = key[2];
 			choice.mode = key[3];
-			choice.role = key[4];
 
 			choices.push(choice);
 		}
