@@ -1,0 +1,128 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Harrow",
+	"scopeName": "source.harrow",
+  
+	"patterns": [
+	  { "include": "#comments" },
+	  { "include": "#routes" },
+	  { "include": "#dialogues" },
+	  { "include": "#bracketCommands" }
+	],
+  
+	"repository": {
+	  "comments": {
+		"patterns": [
+		  {
+			"name": "comment.line.harrow",
+			"match": "^\\/.*$"
+		  }
+		]
+	  },
+  
+	  "routes": {
+		"patterns": [
+		  {
+			"name": "entity.name.section.harrow",
+			"match": "^#.*$"
+		  }
+		]
+	  },
+  
+	  "dialogues": {
+		"patterns": [
+		  {
+			"name": "markup.list.harrow",
+			"begin": "^-",
+			"beginCaptures": {
+			  "0": {
+				"name": "punctuation.definition.list.harrow"
+			  }
+			},
+			"end": "$",
+			"patterns": [
+			  {
+				"name": "punctuation.separator.harrow",
+				"match": ":"
+			  },
+			  { "include": "#operators" },
+			  { "include": "#numbers" },
+			  { "include": "#booleans" }
+			]
+		  }
+		]
+	  },
+  
+	  "bracketCommands": {
+		"patterns": [
+		  {
+			"name": "meta.brackets.harrow",
+			"begin": "\\[",
+			"beginCaptures": {
+			  "0": {
+				"name": "punctuation.definition.bracket.begin.harrow"
+			  }
+			},
+			"end": "\\]",
+			"endCaptures": {
+			  "0": {
+				"name": "punctuation.definition.bracket.end.harrow"
+			  }
+			},
+			"patterns": [
+			  { "include": "#flowKeywords" },
+			  { "include": "#conditionalKeywords" },
+			  { "include": "#operators" },
+			  { "include": "#numbers" },
+			  { "include": "#booleans" }
+			]
+		  }
+		]
+	  },
+  
+	  "flowKeywords": {
+		"patterns": [
+		  {
+			"name": "keyword.control.harrow",
+			"match": "\\b(move|wait|lock|close|story|transition)\\b"
+		  }
+		]
+	  },
+  
+	  "conditionalKeywords": {
+		"patterns": [
+		  {
+			"name": "keyword.control.conditional.harrow",
+			"match": "\\b(if|else|end)\\b"
+		  }
+		]
+	  },
+  
+	  "operators": {
+		"patterns": [
+		  {
+			"name": "keyword.operator.harrow",
+			"match": "(<=|>=|=|\\+|-|\\*|\\/|<|>|\\broll\\b|\\bchance\\b)"
+		  }
+		]
+	  },
+  
+	  "numbers": {
+		"patterns": [
+		  {
+			"name": "constant.numeric.harrow",
+			"match": "\\b\\d+\\b"
+		  }
+		]
+	  },
+  
+	  "booleans": {
+		"patterns": [
+		  {
+			"name": "constant.language.boolean.harrow",
+			"match": "\\b(true|false)\\b"
+		  }
+		]
+	  }
+	}
+  }  

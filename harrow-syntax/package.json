@@ -1,0 +1,28 @@
+{
+  "name": "harrow-syntax",
+  "displayName": "Harrow Script Syntax",
+  "description": "Syntax highlighting for Harrow narrative scripts",
+  "version": "0.0.1",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": ["Programming Languages"],
+  "contributes": {
+    "languages": [
+      {
+        "id": "harrow",
+        "aliases": ["Harrow"],
+        "extensions": [".harrow", ".story"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "harrow",
+        "scopeName": "source.harrow",
+        "path": "./syntaxes/harrow.tmLanguage.json"
+      }
+    ]
+  }
+}
