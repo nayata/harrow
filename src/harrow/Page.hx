@@ -15,6 +15,7 @@ class Page {
 	public var type:String = "";
 	public var text:String = "";
 	public var data:String = "";
+	public var tags:String = "";
 	
 	public function new() {}
 }

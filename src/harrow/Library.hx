@@ -8,8 +8,9 @@ class Library {
 	public static var HASH:String = "#";
 	public static var DASH:String = "-";
 	public static var KEY:String = ":";
-
+	
 	public static var colonEscape:String = "::";
+	public static var validate:Bool = true;
 
 	static var TYPE:Int = 0;
 	static var TEXT:Int = 1;
@@ -17,7 +18,7 @@ class Library {
 	static var PROP:Int = 3;
 
 
-	public static function get(entry:String, validate:Bool = true):Story {
+	public static function get(entry:String):Story {
 		var res = entry.split("\n");
 
 		var story = new Story();
@@ -64,7 +65,6 @@ class Library {
 			case Page.ROUTE: getRoute(page, string);
 			case Page.DIALOGUE: getDialogue(page, string);
 			case Page.EVENT: getEvent(page, string);
-			default:
 		}
 
 		return page;
@@ -83,11 +83,20 @@ class Library {
 
 	static function getText(page:Page, entry:String) {
 		var raw = StringTools.replace(entry, colonEscape, LINE);
-		var key = raw.split(KEY);
-
-		page.text = StringTools.trim(key.pop());
+		var key = raw.indexOf(":");
+	
+		page.text = StringTools.trim(key >= 0 ? raw.substr(key + 1) : raw);
+		page.data = key >= 0 ? StringTools.trim(raw.substr(0, key)) : "";
+		
 		page.text = StringTools.replace(page.text, LINE, KEY);
-		page.data = key.length > 0 ? StringTools.trim(key[TYPE]) : "";
+
+		var open = page.data.indexOf("<");
+		var close = page.data.indexOf(">");
+
+		if (open != -1 && close > open) {
+			page.tags = page.data.substr(open + 1, close - open - 1);
+			page.data = page.data.substr(0, open);
+		}
 	}
 
 
@@ -171,8 +180,7 @@ class Library {
 
 
 	static function isBreak(entry:String):Bool {
-		if (entry.length >= 2 && entry.substring(0, 2) == DASH + DASH) return true;
-		return false;
+		return entry.length >= 2 && entry.substring(0, 2) == DASH + DASH;
 	}
 
 
@@ -184,7 +192,7 @@ class Library {
 
 	static function isVariable(entry:String):Bool {
 		if (entry == "=" || entry == "+" || entry == "-" || entry == "*" || entry == "/") return true;
-		if (entry == "is" || entry == "roll" || entry == "chance") return true;
+		if (entry == "roll" || entry == "chance") return true;
 		return false;
 	}
 }
