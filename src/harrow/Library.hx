@@ -9,7 +9,7 @@ class Library {
 	public static var DASH:String = "-";
 	public static var KEY:String = ":";
 	
-	public static var colonEscape:String = "::";
+	public static var escaping:String = "::";
 	public static var validate:Bool = true;
 
 	static var TYPE:Int = 0;
@@ -67,6 +67,8 @@ class Library {
 			case Page.EVENT: getEvent(page, string);
 		}
 
+		Syntax.custom(page, string);
+
 		return page;
 	}
 
@@ -82,7 +84,7 @@ class Library {
 
 
 	static function getText(page:Page, entry:String) {
-		var raw = StringTools.replace(entry, colonEscape, LINE);
+		var raw = StringTools.replace(entry, escaping, LINE);
 		var key = raw.indexOf(":");
 	
 		page.text = StringTools.trim(key >= 0 ? raw.substr(key + 1) : raw);

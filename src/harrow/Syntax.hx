@@ -1,6 +1,15 @@
 package harrow;
 
 class Syntax {
+	// Custom syntax hook for user-defined parsing logic
+	public static var custom:(Page, String) -> Void = customSyntax;
+
+	// Default custom syntax handler (does nothing)
+	static function customSyntax(page:Page, entry:String):Void {
+	}
+
+
+	// Syntax validation
 	public static function validate(story:Story) {
 		// Stores defined variables
 		var variables:Map<String, Bool> = new Map();
@@ -10,7 +19,6 @@ class Syntax {
 
 		// Tracks routes and whether they are referenced
 		var routes:Map<String, Bool> = new Map();
-
 
 		// Collect definitions and statistics
 		for (page in story.data) {
@@ -39,7 +47,6 @@ class Syntax {
 				duplicates.set(name, count);
 			}
 		}
-
 
 		// Validate references and syntax
 		for (page in story.data) {
@@ -95,7 +102,6 @@ class Syntax {
 				default:
 			}
 		}
-
 
 		// Report duplicate route definitions
 		for (route => count in duplicates) {
