@@ -41,7 +41,7 @@ class App extends hxd.App {
 		harrow.Random.dice = dice.roll;
 
 		// Don't parse speaker(name: text from character)
-		Library.colonEscape = ":";
+		Library.escaping = ":";
 
 		var entry = sys.io.File.getContent("res/story.twee");
 
