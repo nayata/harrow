@@ -243,11 +243,4 @@ function onEvent(type:String, data:String) {
 
 Events automatically advance the flow to the next page after execution.
 
-...
-
-Transition
-Close
-Storage
-Random
-
 See [Twine](Twine.md) for more information.
