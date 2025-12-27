@@ -1,5 +1,7 @@
 # Harrow
 
+![Harrow](/harrow.png "Harrow")
+
 Library and a runtime for narrative-driven games.
 
 
