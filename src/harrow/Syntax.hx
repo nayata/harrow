@@ -1,6 +1,8 @@
 package harrow;
 
 class Syntax {
+	static final RESERVED = ["true", "false", "else", "end", "chance", "roll"];
+
 	// Custom syntax hook for user-defined parsing logic
 	public static var custom:(Page, String) -> Void = customSyntax;
 
@@ -30,6 +32,7 @@ class Syntax {
 				var type = parts[1];
 
 				if (type == "=" || type == "roll" || type == "chance") {
+					if (!isValidName(name)) throw('Invalid variable name "${name}"');
 					variables.set(name, true);
 				}
 			}
@@ -126,5 +129,16 @@ class Syntax {
 		for (route => reference in routes) {
 			if (!reference) trace('Warning: Route "${route}" may be unreachable');
 		}
+	}
+
+
+	static function isValidName(name:String):Bool {
+		if (name == null || name.length == 0) return false;
+		
+		if (!Math.isNaN(Std.parseFloat(name))) return false;
+		if (RESERVED.contains(name)) return false;
+
+		var first = name.charAt(0);
+		return (first >= "a" && first <= "z") || (first >= "A" && first <= "Z");
 	}
 }
