@@ -34,12 +34,13 @@ class Runtime {
 				nextPage();
 			
 			case Page.MOVE : 
-				if (page.data == "story") onStory(page.text);
-				if (page.data == "close") onClose();
-				if (page.data == "move") {
-					story.move(page.text);
+				if (page.data == "move" || page.data == "link") {
+					story.move(page.data == "link" ? Storage.get(page.text) : page.text);
 					nextPage();
 				}
+				if (page.data == "story") onStory(page.text);
+				if (page.data == "close") onClose();
+				if (page.data == "lock") onLock();
 				
 			case Page.CONDITION : 
 				var condition = Logic.condition(page.text);
@@ -71,20 +72,19 @@ class Runtime {
 
 
 	public function onChoice(type:String, data:String) {
-		if (type == "route") story.move(data);
 		if (type == "variable") Logic.variable(data);
+		if (type == "route") story.move(data);
 		nextPage();
 	}
 
-	public dynamic function onPage(page:Page) {}
 
+	public dynamic function onPage(page:Page) {}
 	public dynamic function onText(text:String, name:String) {}
 	public dynamic function onDialogue(dialogue:Array<Choice>) {}
 	public dynamic function onEvent(type:String, data:String) {}
-
 	public dynamic function onTransition(name:String) {}
-	
 	public dynamic function onStory(name:String) {}
 	public dynamic function onClose() {}
+	public dynamic function onLock() {}
 	public dynamic function onEnd() {}
 }

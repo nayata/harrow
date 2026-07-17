@@ -10,7 +10,7 @@ class Logic {
 
 		switch (type) {
 			case "=":
-				set(name, get(prop));
+				set(name, string(prop));
 			case "+":
 				var a = float(name);
 				var b = float(prop);
@@ -31,12 +31,17 @@ class Logic {
 				var b = float(prop);
 
 				set(name, Std.string(a / b));
+			case "%":
+				var a = float(name);
+				var b = float(prop);
+				
+				set(name, Std.string(a % b));
 			case "chance":
-				var prob = Random.chance(get(prop));
+				var prob = Random.chance(string(prop));
 
 				set(name, Std.string(prob));
 			case "roll":
-				var roll = Random.dice(get(prop));
+				var roll = Random.dice(string(prop));
 
 				set(name, Std.string(roll));
 			default:
@@ -55,10 +60,10 @@ class Logic {
 		
 		var result = false;
 		switch (type) {
-			case "is":
-				result = get(name) == get(prop);
-			case "=":
-				result = get(name) == get(prop);
+			case "is", "==", "=":
+				result = string(name) == string(prop);
+			case "!=":
+				result = string(name) != string(prop);
 			case "<=":
 				var a = float(name);
 				var b = float(prop);
@@ -80,7 +85,7 @@ class Logic {
 
 				result = a > b;
 			case "chance":
-				result = Random.chance(get(prop));
+				result = Random.chance(string(prop));
 			default:
 		}
 		
@@ -88,13 +93,16 @@ class Logic {
 	}
 
 	static inline function float(entry:String):Float {
-		var number = Std.parseFloat(get(entry));
-		if (Math.isNaN(number)) throw('Invalid input format: "${entry}". Expected: number');
+		var number = Std.parseFloat(string(entry));
+		if (Math.isNaN(number)) {
+			trace('Warning: "${entry}" is not a number, defaulting to 0');
+			return 0;
+		}
 
 		return number;
 	}
 
-	static function get(entry:String):String {
+	static function string(entry:String):String {
 		if (entry == "false" || entry == "true") return entry;
 		if (Storage.has(entry)) return Storage.get(entry);
 

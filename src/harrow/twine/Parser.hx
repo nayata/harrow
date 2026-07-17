@@ -1,18 +1,16 @@
 package harrow.twine;
 
 // Based on https://github.com/videlais/extwee
-class Parser {
-	public static function get(entry:String):Story {
+class Parser extends Library {
+	public static function get(entry:String, validate = true):Story {
 		var story = new Story();
 		var start = "";
-
 
 		// Split the file based on the passage sigil (::) proceeded by a newline
 		var passages = entry.split("\n::");
 
 		// Fix the first result
 		passages[0] = passages[0].substring(2, passages[0].length);
-
 
 		// Iterate through the passages
 		for (passage in passages) {
@@ -113,6 +111,9 @@ class Parser {
 				}
 			}
 		}
+
+		// Validate syntax
+		if (validate) Syntax.validate(story);
 		
 		// Move 'Story.page' to StoryData 'start' value
 		story.move(start);

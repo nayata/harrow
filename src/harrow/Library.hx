@@ -1,16 +1,16 @@
 package harrow;
 
 class Library {
-	public static var SPACE:String = " ";
-	public static var LINE:String = "|";
-	public static var ITEM:String = "::";
-	public static var COMA:String = ",";
-	public static var HASH:String = "#";
-	public static var DASH:String = "-";
-	public static var KEY:String = ":";
-	
-	public static var escaping:String = "::";
-	public static var validate:Bool = true;
+	public static inline var SPACE:String = " ";
+	public static inline var LINE:String = "|";
+	public static inline var ITEM:String = "::";
+	public static inline var COMA:String = ",";
+	public static inline var HASH:String = "#";
+	public static inline var DASH:String = "-";
+	public static inline var KEY:String = ":";
+
+	public static var DIVIDE:String = "\uE000";
+	public static var ESCAPE:String = "\\:";
 
 	static var TYPE:Int = 0;
 	static var TEXT:Int = 1;
@@ -18,7 +18,7 @@ class Library {
 	static var PROP:Int = 3;
 
 
-	public static function get(entry:String):Story {
+	public static function get(entry:String, validate = true):Story {
 		var res = entry.split("\n");
 
 		var story = new Story();
@@ -43,7 +43,7 @@ class Library {
 	}
 
 
-	public static function parse(entry:String):Null<Page> {
+	static function parse(entry:String):Null<Page> {
 		var string = StringTools.trim(entry);
 
 		if (string.length == 0) return null;
@@ -55,16 +55,14 @@ class Library {
 		var leading = string.substring(0, 1);
 
 		if (leading == "#") page.type = Page.ROUTE;
-		if (leading == "-") page.type = Page.DIALOGUE;
-		if (leading == "[") page.type = isEvent(string);
+		if (leading == "-") page.type = getDialogue(string);
+		if (leading == "[") page.type = getEvent(string);
 
-		if (isBreak(string)) page.type = Page.BREAK;
-		
 		switch (page.type) {
-			case Page.TEXT: getText(page, string);
-			case Page.ROUTE: getRoute(page, string);
-			case Page.DIALOGUE: getDialogue(page, string);
-			case Page.EVENT: getEvent(page, string);
+			case Page.TEXT: setText(page, string);
+			case Page.ROUTE: setRoute(page, string);
+			case Page.DIALOGUE: setDialogue(page, string);
+			case Page.EVENT: setEvent(page, string);
 		}
 
 		Syntax.custom(page, string);
@@ -73,7 +71,7 @@ class Library {
 	}
 
 
-	public static function merge(page:Page, last:Page):Bool {
+	static function merge(page:Page, last:Page):Bool {
 		if (page != null && page.type == Page.DIALOGUE && last != null && last.type == Page.DIALOGUE) {
 			last.text = last.text + LINE + page.text;
 			last.data = "dialogue";
@@ -83,14 +81,14 @@ class Library {
 	}
 
 
-	static function getText(page:Page, entry:String) {
-		var raw = StringTools.replace(entry, escaping, LINE);
+	static function setText(page:Page, entry:String) {
+		var raw = StringTools.replace(entry, ESCAPE, DIVIDE);
 		var key = raw.indexOf(":");
 	
-		page.text = StringTools.trim(key >= 0 ? raw.substr(key + 1) : raw);
+		page.text = key >= 0 ? StringTools.trim(raw.substr(key + 1)) : raw;
 		page.data = key >= 0 ? StringTools.trim(raw.substr(0, key)) : "";
 		
-		page.text = StringTools.replace(page.text, LINE, KEY);
+		page.text = StringTools.replace(page.text, DIVIDE, KEY);
 
 		var open = page.data.indexOf("<");
 		var close = page.data.indexOf(">");
@@ -102,7 +100,7 @@ class Library {
 	}
 
 
-	static function getRoute(page:Page, entry:String) {
+	static function setRoute(page:Page, entry:String) {
 		var locked = entry.substring(0, 2) != HASH + HASH;
 
 		page.text = StringTools.trim(StringTools.replace(entry, HASH, ""));
@@ -110,8 +108,8 @@ class Library {
 	}
 
 
-	static function getDialogue(page:Page, entry:String) {
-		var res = StringTools.replace(entry, DASH, "");
+	static function setDialogue(page:Page, entry:String) {
+		var res = entry.substring(1);
 		var key = res.split(KEY);
 				
 		var text = StringTools.trim(key[TYPE]);
@@ -144,11 +142,10 @@ class Library {
 	}
 
 
-	static function getEvent(page:Page, entry:String) {
+	static function setEvent(page:Page, entry:String) {
 		var string = entry.substring(1, entry.length-1);
 		string = StringTools.trim(string);
 		
-		string = StringTools.replace(string, COMA + SPACE, COMA);
 		string = StringTools.replace(string, SPACE + SPACE, KEY);
 		string = StringTools.replace(string, SPACE, KEY);
 
@@ -159,7 +156,7 @@ class Library {
 		page.text = StringTools.replace(string, type + ":", "");
 		page.data = type;
 		
-		if (type == "story" || type == "move") {
+		if (type == "story" || type == "move" || type == "link") {
 			page.type = Page.MOVE;
 			page.text = StringTools.replace(page.text, KEY, SPACE);
 		}
@@ -181,19 +178,20 @@ class Library {
 	}
 
 
-	static function isBreak(entry:String):Bool {
-		return entry.length >= 2 && entry.substring(0, 2) == DASH + DASH;
+	static function getDialogue(entry:String):String {
+		if (entry.length >= 2 && entry.substring(0, 2) == DASH + DASH) return Page.BREAK;
+		return Page.DIALOGUE;
 	}
 
 
-	static function isEvent(entry:String):String {
+	static function getEvent(entry:String):String {
 		if (entry.indexOf("]") != entry.length-1) return Page.TEXT;
 		return Page.EVENT;
 	}
 
 
 	static function isVariable(entry:String):Bool {
-		if (entry == "=" || entry == "+" || entry == "-" || entry == "*" || entry == "/") return true;
+		if (entry == "=" || entry == "+" || entry == "-" || entry == "*" || entry == "/" || entry == "%") return true;
 		if (entry == "roll" || entry == "chance") return true;
 		return false;
 	}

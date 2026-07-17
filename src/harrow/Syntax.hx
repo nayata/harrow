@@ -64,6 +64,7 @@ class Syntax {
 					var lines = page.text.split(Library.LINE);
 					for (line in lines) {
 						var parts = line.split(Library.ITEM);
+						
 						if (parts.length >= 3 && parts[1] == "route") {
 							var target = parts[2];
 	
@@ -71,6 +72,19 @@ class Syntax {
 								routes.set(target, true);
 							} else {
 								trace('Warning: Reference to undefined route "${target}"');
+							}
+						}
+
+						if (parts.length >= 3 && parts[1] == "variable") {
+							var expr = parts[2].split(Library.KEY);
+
+							var name = expr[0];
+							var type = expr[1];
+
+							if (type == "+" || type == "-" || type == "*" || type == "/" || type == "%") {
+								if (!variables.exists(name)) {
+									trace('Warning: Variable "${name}" is not defined (used in dialogue choice)');
+								}
 							}
 						}
 					}
@@ -93,7 +107,7 @@ class Syntax {
 					var name = parts[0];
 					var type = parts[1];
 	
-					if (type == "+" || type == "-" || type == "*" || type == "/") {
+					if (type == "+" || type == "-" || type == "*" || type == "/" || type == "%") {
 						if (!variables.exists(name)) {
 							trace('Warning: Variable "${name}" is not defined');
 						}
