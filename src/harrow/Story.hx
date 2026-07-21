@@ -25,10 +25,15 @@ class Story {
 
 	public function skip():Int {
 		var position = page + 1;
+		var depth = 0;
 
 		for (i in position...data.length) {
 			if (data[i].type == Page.CONDITION) {
-				if (data[i].text == "end" || data[i].text == "else") return page = i;
+				if (data[i].data == "if") depth++; 
+				if (data[i].text == "end" || data[i].text == "else") {
+					if (depth == 0) return page = i;
+                	if (data[i].text == "end") depth--;
+				}
 			}
 		}
 		return page;
@@ -56,8 +61,6 @@ class Story {
 	public function find(type:String, text:String):Null<Int> {
 		for (i in 0...data.length) {
 			if (data[i].type == type && data[i].text == text) return i;
-			if (text == "any" && data[i].type == type) return i;
-			if (type == "any" && data[i].text == text) return i;
 		}
 		return null;
 	}
@@ -65,6 +68,7 @@ class Story {
 
 	public function all(type:String):Array<Page> {
 		var array = [];
+		
 		for (page in data) {
 			if (page.type == type) array.push(page);
 		}
