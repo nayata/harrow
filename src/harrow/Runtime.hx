@@ -34,13 +34,13 @@ class Runtime {
 				nextPage();
 			
 			case Page.MOVE : 
-				if (page.data == "move" || page.data == "link") {
-					story.move(page.data == "link" ? Storage.get(page.text) : page.text);
-					nextPage();
-				}
 				if (page.data == "story") onStory(page.text);
 				if (page.data == "close") onClose();
 				if (page.data == "lock") onLock();
+				if (page.data == "move") {
+					story.move(page.text);
+					nextPage();
+				}
 				
 			case Page.CONDITION : 
 				var condition = Logic.condition(page.text);

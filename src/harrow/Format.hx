@@ -4,13 +4,15 @@ class Format {
 	public static function variable(entry:String):String {
 		if (entry.indexOf("[") == -1) return entry;
 
-		var rex:EReg = ~/\[(.*?)\]/gi;
+		var rex:EReg = ~/\[(.*?)\]/g;
 
 		entry = rex.map(entry, function(r) {
 			var matching = r.matched(0);
 			var variable = matching.substring(1, matching.length-1);
 
 			if (Storage.has(variable)) return Storage.get(variable);
+
+			trace('Warning: variable "${variable}" is not defined');
 			return matching;
 		});
 

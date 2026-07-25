@@ -156,7 +156,7 @@ class Library {
 		page.text = StringTools.replace(string, type + ":", "");
 		page.data = type;
 		
-		if (type == "story" || type == "move" || type == "link") {
+		if (type == "story" || type == "move") {
 			page.type = Page.MOVE;
 			page.text = StringTools.replace(page.text, KEY, SPACE);
 		}
