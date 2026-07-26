@@ -191,8 +191,6 @@ class Library {
 
 
 	static function isVariable(entry:String):Bool {
-		if (entry == "=" || entry == "+" || entry == "-" || entry == "*" || entry == "/" || entry == "%") return true;
-		if (entry == "roll" || entry == "chance") return true;
-		return false;
+		return Logic.operators.contains(entry);
 	}
 }

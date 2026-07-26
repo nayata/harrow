@@ -2,6 +2,7 @@ package harrow;
 
 class Syntax {
 	static final RESERVED = ["true", "false", "else", "end", "chance", "roll"];
+	static final OPERATOR = ["=", "+", "-", "*", "/", "%", "%+", "%-"];
 
 	// Custom syntax hook for user-defined parsing logic
 	public static var custom:(Page, String) -> Void = customSyntax;
@@ -84,7 +85,7 @@ class Syntax {
 							var name = expr[0];
 							var type = expr[1];
 
-							if (type == "+" || type == "-" || type == "*" || type == "/" || type == "%") {
+							if (OPERATOR.contains(type)) {
 								if (!variables.exists(name)) {
 									trace('Warning: Variable "${name}" is not defined (used in dialogue choice)');
 								}
@@ -110,7 +111,7 @@ class Syntax {
 					var name = parts[0];
 					var type = parts[1];
 	
-					if (type == "+" || type == "-" || type == "*" || type == "/" || type == "%") {
+					if (OPERATOR.contains(type)) {
 						if (!variables.exists(name)) {
 							trace('Warning: Variable "${name}" is not defined');
 						}

@@ -1,6 +1,8 @@
 package harrow;
 
 class Logic {
+	public static final operators:Array<String> = ["=", "+", "-", "*", "/", "%", "roll", "chance", "%+", "%-"];
+
 	public static function variable(entry:String) {
 		var key = entry.split(Library.KEY);
 
@@ -36,6 +38,23 @@ class Logic {
 				var b = float(prop);
 				
 				set(name, Std.string(a % b));
+
+			case "%+":
+				var old = float(name);
+				var pct = float(prop);
+				
+				var value = old + ((100 - old) * pct / 100);
+
+				set(name, Std.string(clamp(value, 0, 100)));
+
+			case "%-":
+				var old = float(name);
+				var pct = float(prop);
+
+				var value = old - (old * pct / 100);
+
+				set(name, Std.string(clamp(value, 0, 100)));
+
 			case "chance":
 				var prob = Random.chance(string(prop));
 
@@ -92,7 +111,13 @@ class Logic {
 		return result;
 	}
 
-	static inline function float(entry:String):Float {
+	static function clamp(v:Float, min:Float, max:Float):Float {
+		if (v < min) return min;
+		if (v > max) return max;
+		return v;
+	}
+
+	static function float(entry:String):Float {
 		var number = Std.parseFloat(string(entry));
 		if (Math.isNaN(number)) {
 			trace('Warning: "${entry}" is not a number, defaulting to 0');
