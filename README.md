@@ -9,37 +9,41 @@ Library and a runtime for narrative-driven games.
 ## Example
 
 ```twee
-[torchLit = false]
+[health = 80]
+[energy = 100]
+[potions = 2]
 
 
-The mouth of the cave yawns open, cold air curling out like breath. 
-Moss clings to the stones, and the scent of damp earth fills the air. 
+Neon lights flicker across the rain-slicked streets of New Eridu.
+Holographic ads scream for your attention as hover-cars zip overhead.
+Your comms crackle to life.
 
-Kaelen: We’re not turning back now.
+Operator: Proxy, this is Control. Hollow anomaly in Sector 7 slums.
+Operator: Corrupted Ethereal drone gone rogue - it's assimilating tech and proxies alike.
+Operator: Neutralize it before it breaches the outer wall. Gear up and move out.
 
-- Light the torch : torchLit = true
-- Enter without a light
-
-You step forward, heart pounding.
-
-[if torchLit = true]
-    The torch casts long shadows across the stone walls.
-[else]
-    Darkness swallows everything beyond the first few steps.
-[end]
+- Check Inventory : Inventory
+- Move to Factory : Factory
 
 
-- Follow the narrow tunnel : Tunnel
-- Climb the crumbled ledge : Ledge
+# Inventory
+
+Health [health] | Energy [energy]
+Potion [potions] (Restore 30 health)
+
+Your plasma rifle hums softly, charging indicator glowing blue. Standard-issue, reliable.
+Base Damage [damage]
+
+[move Factory]
 
 
-# Tunnel
-    The tunnel twists sharply, the walls damp and close. 
-    A faint sound echoes ahead — like whispering metal.
+# Factory
+Rusted gates creak open. Inside, machinery groans under red emergency lights.
+A massive shadow lurches forward - the Corrupted Drone.
 
-# Ledge
-    The rocks shift underfoot as you climb.
-    At the top, a hidden alcove reveals a faded mural of a forgotten king.
+It screeches: "Intruder... assimilate!"
+
+[move Battle]
 ```
 
 
@@ -47,9 +51,7 @@ You step forward, heart pounding.
 ## How It Works
 
 1. Use `harrow.Library` to parse a story file into a `harrow.Story` object.
-
 2. Pass the `Story` to `harrow.Runtime`, which interprets and runs the content.
-
 3. Attach listeners to `harrow.Runtime` events like text, choices and actions to connect the narrative to UI or game systems.
 
 
