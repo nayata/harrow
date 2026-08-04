@@ -101,7 +101,7 @@ Your health is [health] and you have [potions] potions. Weapon damage is [damage
 
 // Hit result
 
-[if hit = fast]
+[if hit == fast]
 	[damage roll 20]
 	[monster.health - damage]
 

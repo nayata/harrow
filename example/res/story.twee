@@ -6,7 +6,7 @@ Hunt
 {
   "ifid": "3ED967BF-485C-41FC-9D63-A6C218D6996C",
   "format": "Harrow",
-  "format-version": "1.0.0",
+  "format-version": "1.2.0",
   "start": "Start",
   "zoom": 1
 }
@@ -74,24 +74,19 @@ You draw your weapon.
 
 
 :: Battle {"position":"600,300","size":"100,100"}
-Your health is [health] and you have [potions] potions. Weapon damage is [damage]. Monster health is [monster.health].
-
 [hit = default]
 
-[if  potions > 0]
+Your health is [health] and you have [potions] potions. Weapon damage is [damage]. Monster health is [monster.health].
+
+
 - Fast strike : hit = fast
 - Heavy strike       
-- Drink potion : Heal
-[else]
-- Fast strike : hit = fast
-- Heavy strike
-[end]
-
+- Drink potion : Heal : potions > 0
 
 
 // Hit result
 
-[if hit = fast]
+[if hit == fast]
 	[damage roll weapon.roll]
 	[monster.health - damage]
 

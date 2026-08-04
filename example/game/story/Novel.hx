@@ -72,7 +72,7 @@ class Novel extends h2d.Object {
 
 			if (Key.isPressed(Key.SPACE) || Key.isPressed(Key.X)) {
 				state = "empty";
-				onSelect(dialogue.selected.type, dialogue.selected.data);
+				onSelect(dialogue.selected.link, dialogue.selected.data);
 			}
 		}
 

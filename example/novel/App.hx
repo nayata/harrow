@@ -107,9 +107,9 @@ class App extends hxd.App {
 
 
 	// Send selected choice data to `harrow.Runtime`
-	function onSelect(type:String, data:String) {
+	function onSelect(link:String, data:String) {
 		dialogue.visible = false;
-		novel.onChoice(type, data);
+		novel.onChoice(link, data);
 	}
 
 

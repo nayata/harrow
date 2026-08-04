@@ -8,7 +8,7 @@ class Button extends h2d.Object {
 	public var text(default, set):String = "empty"; 
 	public var mode(default, set):String = "empty"; 
 
-	public var type:String = "";
+	public var link:String = "";
 	public var data:String = "";
 	public var role:String = "";
 

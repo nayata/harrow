@@ -30,7 +30,7 @@ class Dialogue extends h2d.Object {
 
 		for (i in 0...dialogue.length) {
 			choices[i].text = (i+1) + ". " + dialogue[i].text;
-			choices[i].type = dialogue[i].type;
+			choices[i].link = dialogue[i].link;
 			choices[i].data = dialogue[i].data;
 			
 			choices[i].visible = true;
@@ -46,14 +46,14 @@ class Dialogue extends h2d.Object {
 	function onClick() {
 		for (choice in choices) {
 			if (choice.selected) {
-				onSelect(choice.type, choice.data);
+				onSelect(choice.link, choice.data);
 				choice.selected = false;
 			}
 		}
 	}
 
 
-	public dynamic function onSelect(type:String, data:String) {
+	public dynamic function onSelect(link:String, data:String) {
 	}
 
 

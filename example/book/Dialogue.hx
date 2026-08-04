@@ -29,8 +29,13 @@ class Dialogue extends h2d.Object {
 
 		for (i in 0...dialogue.length) {
 			choices[i].text = (i+1) + ". " + dialogue[i].text;
-			choices[i].type = dialogue[i].type;
+			choices[i].link = dialogue[i].link;
 			choices[i].data = dialogue[i].data;
+
+			choices[i].mode = "enabled";
+
+			var allowed = dialogue[i].mode == "empty" ? true : harrow.Logic.condition(dialogue[i].mode);
+			if (!allowed) choices[i].mode = "disabled";
 			
 			choices[i].visible = true;
 			choices[i].y = i * choices[i].height + 4;
@@ -45,7 +50,7 @@ class Dialogue extends h2d.Object {
 	function onClick() {
 		for (choice in choices) {
 			if (choice.selected) {
-				onSelect(choice.type, choice.data);
+				onSelect(choice.link, choice.data);
 				choice.selected = false;
 			}
 		}

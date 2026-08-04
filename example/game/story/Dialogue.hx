@@ -37,7 +37,7 @@ class Dialogue extends h2d.Object {
 
 		for (i in 0...dialogue.length) {
 			choices[i].text = (i+1) + ". " + dialogue[i].text;
-			choices[i].type = dialogue[i].type;
+			choices[i].link = dialogue[i].link;
 			choices[i].data = dialogue[i].data;
 
 			choices[i].mode = "choice";

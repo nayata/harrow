@@ -50,7 +50,7 @@ npc: No one wants to fight the Boss!
 	npc: You have a sword - maybe you should give it a try?
 [end]
 
-[if boss.defeated = true]
+[if boss.defeated is true]
 	Long story short...
 
 	npc: What? The Boss is defeated?!
@@ -63,7 +63,7 @@ npc: No one wants to fight the Boss!
 
 # Boss
 
-[if boss.defeated = true]
+[if boss.defeated == true]
 	boss: You again?!
 	boss: Go away!
 	[close]
