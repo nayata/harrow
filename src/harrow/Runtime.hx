@@ -71,9 +71,9 @@ class Runtime {
 	}
 
 
-	public function onChoice(type:String, data:String) {
-		if (type == "variable") Logic.variable(data);
-		if (type == "route") story.move(data);
+	public function onChoice(link:String, data:String) {
+		if (data != "empty") Logic.variable(data);
+		if (link != "empty") story.move(link);
 		nextPage();
 	}
 

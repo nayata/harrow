@@ -11,7 +11,7 @@ class Dialogue {
 			var choice = new Choice();
 			
 			choice.text = key[0];
-			choice.type = key[1];
+			choice.link = key[1];
 			choice.data = key[2];
 			choice.mode = key[3];
 

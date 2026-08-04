@@ -1,7 +1,8 @@
 package harrow;
 
 class Logic {
-	public static final operators:Array<String> = ["=", "+", "-", "*", "/", "%", "roll", "chance", "%+", "%-"];
+	public static final OPERATORS:Array<String> = ["=", "+", "-", "*", "/", "%", "roll", "chance", "%+", "%-"];
+	public static final CONDITION:Array<String> = ["is", "==", "!=", "<=", ">=", "<", ">"];
 
 	public static function variable(entry:String) {
 		var key = entry.split(Library.KEY);
@@ -38,7 +39,6 @@ class Logic {
 				var b = float(prop);
 				
 				set(name, Std.string(a % b));
-
 			case "%+":
 				var old = float(name);
 				var pct = float(prop);
@@ -46,7 +46,6 @@ class Logic {
 				var value = old + ((100 - old) * pct / 100);
 
 				set(name, Std.string(clamp(value, 0, 100)));
-
 			case "%-":
 				var old = float(name);
 				var pct = float(prop);
@@ -54,7 +53,6 @@ class Logic {
 				var value = old - (old * pct / 100);
 
 				set(name, Std.string(clamp(value, 0, 100)));
-
 			case "chance":
 				var prob = Random.chance(string(prop));
 
@@ -79,7 +77,7 @@ class Logic {
 		
 		var result = false;
 		switch (type) {
-			case "is", "==", "=":
+			case "is", "==":
 				result = string(name) == string(prop);
 			case "!=":
 				result = string(name) != string(prop);
@@ -103,8 +101,6 @@ class Logic {
 				var b = float(prop);
 
 				result = a > b;
-			case "chance":
-				result = Random.chance(string(prop));
 			default:
 		}
 		

@@ -1,8 +1,7 @@
 package harrow;
 
 class Syntax {
-	static final RESERVED = ["true", "false", "else", "end", "chance", "roll"];
-	static final OPERATOR = ["=", "+", "-", "*", "/", "%", "%+", "%-"];
+	static final RESERVED = ["true", "false", "else", "end", "return", "chance", "roll"];
 
 	// Custom syntax hook for user-defined parsing logic
 	public static var custom:(Page, String) -> Void = customSyntax;
@@ -27,14 +26,35 @@ class Syntax {
 		for (page in story.data) {
 			// Register variable definitions
 			if (page.type == Page.VARIABLE) {
-				var parts = page.text.split(Library.KEY);
+				var segment = page.text.split(Library.KEY);
 
-				var name = parts[0];
-				var type = parts[1];
+				var name = segment[0];
+				var type = segment[1];
 
 				if (type == "=" || type == "roll" || type == "chance") {
 					if (!isValidName(name)) throw('Invalid variable name "${name}"');
 					variables.set(name, true);
+				}
+			}
+
+			// Register variable definitions made inside dialogue choices
+			if (page.type == Page.DIALOGUE) {
+				var lines = page.text.split(Library.LINE);
+				for (line in lines) {
+					var segment = line.split(Library.ITEM);
+					if (segment.length < 4) continue;
+
+					var data = segment[2];
+					if (data == "empty") continue;
+
+					var part = data.split(Library.KEY);
+					var name = part[0];
+					var type = part[1];
+
+					if (type == "=" || type == "roll" || type == "chance") {
+						if (!isValidName(name)) throw('Invalid variable name "${name}"');
+						variables.set(name, true);
+					}
 				}
 			}
 
@@ -47,7 +67,6 @@ class Syntax {
 			if (page.type == Page.ROUTE) {
 				var name = page.text;
 				var count = duplicates.exists(name) ? duplicates.get(name) + 1 : 1;
-
 				duplicates.set(name, count);
 			}
 		}
@@ -67,52 +86,58 @@ class Syntax {
 				case Page.DIALOGUE: 
 					var lines = page.text.split(Library.LINE);
 					for (line in lines) {
-						var parts = line.split(Library.ITEM);
+						var segment = line.split(Library.ITEM);
 						
-						if (parts.length >= 3 && parts[1] == "route") {
-							var target = parts[2];
-	
-							if (routes.exists(target)) {
-								routes.set(target, true);
+						var link = segment[1];
+						var data = segment[2];
+						var mode = segment[3];
+
+						// Route reference
+						if (link != "empty" && link != "return") {
+							if (routes.exists(link)) {
+								routes.set(link, true);
 							} else {
-								trace('Warning: Reference to undefined route "${target}"');
+								trace('Warning: Reference to undefined route "${link}" in dialogue choice');
 							}
 						}
 
-						if (parts.length >= 3 && parts[1] == "variable") {
-							var expr = parts[2].split(Library.KEY);
+						// Variable usage
+						if (data != "empty") {
+							var part = data.split(Library.KEY);
+							var name = part[0];
+							var type = part[1];
 
-							var name = expr[0];
-							var type = expr[1];
-
-							if (OPERATOR.contains(type)) {
-								if (!variables.exists(name)) {
-									trace('Warning: Variable "${name}" is not defined (used in dialogue choice)');
-								}
+							if (type != "=" && type != "roll" && type != "chance" && !variables.exists(name)) {
+								trace('Warning: Variable "${name}" is not defined (used in dialogue choice)');
 							}
 						}
 					}
 
 				// Validate condition syntax
 				case Page.CONDITION if (page.data == "if"): 
-					if (page.text.split(Library.KEY).length < 3) {
+					var part = page.text.split(Library.KEY);
+					var type = part[1];
+
+					if (part.length < 3) {
 						trace('Warning: Invalid input format: "${page.text}". Expected: name:operator:value');
+					} 
+					else if (!Logic.CONDITION.contains(type)) {
+						trace('Warning: Unknown condition operator "${type}" in: "${page.text}"');
 					}
 
 				// Validate variable usage and arithmetic operations
 				case Page.VARIABLE: 
-					var parts = page.text.split(Library.KEY);
+					var part = page.text.split(Library.KEY);
 
-					if (parts.length < 3) {
+					if (part.length < 3) {
 						trace('Warning: Invalid input format: "${page.text}". Expected: name:operator:value');
 					}
 
-					// Check usage of undefined variables in operations
-					var name = parts[0];
-					var type = parts[1];
-	
-					if (OPERATOR.contains(type)) {
-						if (!variables.exists(name)) {
+					var name = part[0];
+					var type = part[1];
+
+					if (Logic.OPERATORS.contains(type)) {
+						if (type != "=" && type != "roll" && type != "chance" && !variables.exists(name)) {
 							trace('Warning: Variable "${name}" is not defined');
 						}
 					}

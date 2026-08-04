@@ -44,7 +44,7 @@ class Library {
 
 
 	static function parse(entry:String):Null<Page> {
-		var string = StringTools.trim(entry);
+		var string = normalize(entry);
 
 		if (string.length == 0) return null;
 		if (string.substring(0, 1) == "/") return null;
@@ -109,44 +109,40 @@ class Library {
 
 
 	static function setDialogue(page:Page, entry:String) {
-		var res = entry.substring(1);
-		var key = res.split(KEY);
-				
-		var text = StringTools.trim(key[TYPE]);
-		var type = "empty";
+		var segment = entry.substring(1).split(KEY);
+
+		var text = StringTools.trim(segment.shift());
+		var link = "empty";
 		var data = "empty";
 		var mode = "empty";
-		
-		if (key.length > 1) {
-			var string = StringTools.trim(key[TEXT]);
-			string = StringTools.replace(string, SPACE, KEY);
-			
-			var prop = string.split(KEY);
+	
+		for (field in segment) {
+			var raw = StringTools.trim(field);
+			if (raw == "") continue;
+	
+			var res = StringTools.replace(raw, SPACE, KEY);
+			var key = res.split(KEY);
 
-			if (isVariable(prop[TEXT])) {
-				type = "variable";
-				data = string;
+			if (key.length >= 3 && Logic.OPERATORS.contains(key[TEXT])) {
+				data = res;
+			}
+			else if (key.length >= 3 && Logic.CONDITION.contains(key[TEXT])) {
+				mode = res;
 			}
 			else {
-				type = "route";
-				data = StringTools.trim(key[TEXT]);
+				link = raw;
 			}
 		}
-		if (key.length > 2) {
-			mode = StringTools.trim(key[DATA]);
-			mode = StringTools.replace(mode, SPACE, KEY);
-		}
-		
-		page.text = text + ITEM + type + ITEM + data + ITEM + mode;
+
+		page.text = text + ITEM + link + ITEM + data + ITEM + mode;
 		page.data = "button";
 	}
 
 
 	static function setEvent(page:Page, entry:String) {
 		var string = entry.substring(1, entry.length-1);
+
 		string = StringTools.trim(string);
-		
-		string = StringTools.replace(string, SPACE + SPACE, KEY);
 		string = StringTools.replace(string, SPACE, KEY);
 
 		var key = string.split(KEY);
@@ -171,7 +167,7 @@ class Library {
 			page.type = Page.CONDITION;
 			page.text = type;
 		}
-		if (isVariable(key[TEXT])) {
+		if (Logic.OPERATORS.contains(key[TEXT])) {
 			page.type = Page.VARIABLE;
 			page.text = string;
 		}
@@ -190,7 +186,7 @@ class Library {
 	}
 
 
-	static function isVariable(entry:String):Bool {
-		return Logic.operators.contains(entry);
+	static function normalize(entry:String):String {
+		return new EReg("\\s+", "g").replace(StringTools.trim(entry), SPACE);
 	}
 }
