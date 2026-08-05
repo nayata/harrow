@@ -280,16 +280,14 @@ This mechanism allows for custom logic, UI updates, sound effects, or any extern
 ### Example:
 
 ```
-[sound play cave_wind.ogg]
-[show image cave_entrance.png]
+[sound play wind.ogg]
+[show image entrance.png]
 ```
 
 
-> [!WARNING]
-> Whitespace is significant in variable expressions, conditions, commands, and events. Operators and arguments must be separated by spaces. Otherwise, they will not be parsed correctly.
->
-> ✔ `[gold + 20]`
->
-> ✘ `[gold+20]`
+# IMPORTANT
 
-See [Running](Running.md) for more information.
+Whitespace is significant in **variable expressions**, **conditions**, **commands**, and **events**. Operators and arguments must be separated by spaces. Otherwise, they will not be parsed correctly.
+
+
+The next section, [Running](Running.md), explains how scripts are executed.
