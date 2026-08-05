@@ -19,7 +19,7 @@ The mouth of the cave yawns open, cold air curling out like breath.
 Moss clings to the stones, and the scent of damp earth fills the air.
 ```
 
-Character dialogue is written using the `:` symbol after the character's name:
+Character dialogue is written using the `:` symbol after the character's name.
 
 ```
 Kaelen: We’re not turning back now.
