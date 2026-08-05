@@ -133,7 +133,7 @@ A variable can be assigned a random value:
 
 #### Variable operations
 
-Basic mathematical operations ('+', '-', '*', '/', and '%') are supported. Other variables can be used in calculations.
+Basic mathematical operations (`+`, `-`, `*`, `/`, and `%`) are supported. Other variables can be used in calculations.
 
 ```
 [damage = 20]
