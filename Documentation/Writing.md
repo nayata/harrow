@@ -1,14 +1,18 @@
 # Introduction
 
-**Harrow** is a lightweight narrative runtime for building structured, interactive stories. It parses story scripts and executes them through a flow-based system.
+**Harrow** is a narrative library for creating interactive stories and choice-based games.
 
-Stories consist of text, character dialogue, variables, choices, actions, events and conditional logic.
+Stories consist of text, character dialogue, variables, choices, actions, events and conditional logic. Each line is processed as an individual story element.
+
+Harrow scripts can be written as plain text files, exported from **Twine** as `.twee` files, or stored using the `.story` extension. For `.story` files, syntax highlighting is available through the Harrow syntax definition:
+
+https://github.com/nayata/harrow/tree/main/harrow-syntax
 
 
 
 # Text
 
-The most basic **Harrow** script is just plain text written in a `.txt` file or a **Twine** `.twee` file. Each line of text creates a new paragraph.
+Story text is written directly as plain text. Each line creates a separate paragraph in the story.
 
 ```
 The mouth of the cave yawns open, cold air curling out like breath. 
@@ -33,16 +37,23 @@ You step forward, heart pounding.
 
 # Choices
 
-Choices can be created using the `-` symbol at the beginning of a line.
+Choices are created by starting a line with the `-` symbol.
 
-A choice may include an action, written after a `:` symbol.
-There are two types of actions:
+A choice consists of visible text followed by one or more optional fields separated by `:`.
 
-1. Route navigation – to jump to another passage.
+```
+Text : Route : Action : Condition
+```
 
-2. Variable operation – to change or assign a variable.
+All fields except the choice text are optional.
 
-A choice may also be empty and simply continue the current flow.
+- **Route** — moves to another route.
+- **Action** — changes or assigns a variable, or performs another supported operation.
+- **Condition** — stores a condition associated with the choice.
+
+A choice with no additional fields simply continues the current route.
+
+Example:
 
 ```
 - Attack : damage = 20
@@ -53,9 +64,7 @@ A choice may also be empty and simply continue the current flow.
 In this example:
 
 - The `Attack` choice uses an action to set damage to 20.
-
 - The `Drink potion` choice uses an action to navigate to the `Heal` route.
-
 - The `Wait` choice has no action and continues the current flow.
 
 
@@ -77,10 +86,10 @@ Moving via choice:
 
 ```
 The mouth of the cave yawns open, cold air curling out like breath.
-- Enter the cave : CaveInterior
+- Enter the cave : Cave
 
 
-# CaveInterior
+# Cave
 You step into the cave. It's cold and silent.
 ```
 
@@ -88,10 +97,10 @@ Moving via command:
 
 ```
 The mouth of the cave yawns open, cold air curling out like breath.
-[move CaveInterior]
+[move Cave]
 
 
-# CaveInterior
+# Cave
 You step into the cave. It's cold and silent.
 ```
 
@@ -124,7 +133,7 @@ A variable can be assigned a random value:
 
 #### Variable operations
 
-Basic mathematical operations (`+`, `-`, `*`, and `/`) are supported. Other variables can be used in calculations.
+Basic mathematical operations ('+', '-', '*', '/', and '%') are supported. Other variables can be used in calculations.
 
 ```
 [damage = 20]
@@ -160,31 +169,45 @@ A simple `if`.
 ```
 [torch.lit = true]
 
-[if torch.lit = true]
+[if torch.lit == true]
     The torch casts long shadows across the stone walls.
 [end]
 ```
 
-`if/else` condition.
+`if/else` condition. As an alternative to `==`, Harrow also supports the `is` operator for equality comparisons.
 
 ```
-[if torch.lit = true]
+[if torch.lit is true]
     The torch casts long shadows across the stone walls.
 [else]
     Darkness swallows everything beyond the first few steps.
 [end]
 ```
 
-`chance` condition.
+
+## CoG-style Fairmath
+
+Harrow includes support for **Fairmath**, the percentage-based stat system popularized by *Choice of Games*.
+
+Unlike simple addition and subtraction, Fairmath makes large values harder to increase and small values harder to decrease. This produces smooth character progression without allowing statistics to reach their minimum or maximum too quickly.
+
+Fairmath is available for any numeric variable using the `%+` and `%-` operators.
 
 ```
-[torch.lit = false]
+[strength %+ 20]
+[morality %- 15]
+```
 
-[if torch.lit chance 50]
-    [torch.lit = true]
-    You fire the torch and long shadows falls across the stone walls.
+Because Fairmath values are stored as normal variables, they can be used anywhere a regular variable can be used, including conditions.
+
+```
+[if strength >= 70]
+    You effortlessly force the door open.
+[else]
+    The door refuses to budge.
 [end]
 ```
+
 
 
 # Actions
@@ -208,7 +231,7 @@ In addition to the `move` command, Harrow supports several built-in **actions** 
   ```
 
 * **`lock`**
-  Completely halts story execution. No further content will be processed unless triggered externally.
+  Completely halts story execution and triggers the `onLock` function. No further content will be processed unless triggered externally.
 
   ```
   [lock]
@@ -230,11 +253,11 @@ In addition to the `move` command, Harrow supports several built-in **actions** 
   ```
 
 * **`transition`**
-  Stops the story and triggers the `onTransition` function.
+  Stops the story and triggers the `onTransition(name)` function.
   Can be used for scene transitions or other UI-related logic.
 
   ```
-  [transition]
+  [transition Fade]
   ```
 
 
