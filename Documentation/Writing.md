@@ -47,9 +47,9 @@ Text : Route : Action : Condition
 
 All fields except the choice text are optional.
 
-- **Route** — moves to another route.
-- **Action** — changes or assigns a variable, or performs another supported operation.
-- **Condition** — stores a condition associated with the choice.
+- **Route** - moves to another route.
+- **Action** - changes or assigns a variable, or performs another supported operation.
+- **Condition** - stores a condition associated with the choice.
 
 A choice with no additional fields simply continues the current route.
 
@@ -272,8 +272,8 @@ When a custom event is encountered, it will trigger the function:
 onEvent(type, data)
 ```
 
-* `type` — the part of the event before the first space
-* `data` — the remaining content after the first space
+* `type` - the part of the event before the first space
+* `data` - the remaining content after the first space
 
 This mechanism allows for custom logic, UI updates, sound effects, or any external behavior needed during story execution.
 
