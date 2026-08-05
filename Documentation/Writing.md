@@ -284,4 +284,12 @@ This mechanism allows for custom logic, UI updates, sound effects, or any extern
 [show image cave_entrance.png]
 ```
 
+
+> [!WARNING]
+> Whitespace is significant in variable expressions, conditions, commands, and events. Operators and arguments must be separated by spaces. Otherwise, they will not be parsed correctly.
+>
+> ✔ `[gold + 20]`
+>
+> ✘ `[gold+20]`
+
 See [Running](Running.md) for more information.
