@@ -109,7 +109,7 @@ Once the player picks an option, pass its `link` and `data` back to the runtime:
 runtime.onChoice(choice.link, choice.data);
 ```
 
-See a [Heaps](https://github.com/nayata/harrow/blob/main/example/src/App.hx) and [HTML](https://github.com/nayata/harrow-twine/blob/main/src/App.hx) example.
+See a [Heaps](https://github.com/nayata/harrow/tree/main/example) and [HTML](https://github.com/nayata/harrow-twine/blob/main/src/App.hx) example.
 
 
 
