@@ -39,7 +39,7 @@ import harrow.Story;
 import harrow.Choice;
 
 class App extends hxd.App {
-	var novel:Runtime;
+	var runtime:Runtime;
 	var story:Story;
 
 	override function init() {
@@ -48,12 +48,12 @@ class App extends hxd.App {
 		var entry = sys.io.File.getContent("res/story.txt");
 		
 		story = Library.get(entry);
-		novel = new Runtime(story);
+		runtime = new Runtime(story);
 
-		novel.onText = onText;
-		novel.onDialogue = onDialogue;
+		runtime.onText = onText;
+		runtime.onDialogue = onDialogue;
 
-		novel.nextPage(); 
+		runtime.nextPage(); 
 	}
 
 	// `name` is the speaker, taken from the `Name:` prefix in the script; empty if the line has no speaker
@@ -87,7 +87,7 @@ Depending on the page type, the flow may automatically continue to the next page
 After displaying the text content, the runtime waits for continuation. Once input is received, call:
 
 ```
-novel.nextPage();
+runtime.nextPage();
 ```
 
 ### Dialogue (Choices)
@@ -106,7 +106,7 @@ public var mode:String = "empty"; // action type attached by the parser
 Once the player picks an option, pass its `link` and `data` back to the runtime:
 
 ```
-novel.onChoice(choice.link, choice.data);
+runtime.onChoice(choice.link, choice.data);
 ```
 
 See a [Heaps](https://github.com/nayata/harrow/blob/main/example/src/App.hx) and [HTML](https://github.com/nayata/harrow-twine/blob/main/src/App.hx) example.
@@ -130,7 +130,7 @@ This triggers the `onStory(name)` function in the runtime.
 Connect a custom handler to `onStory` to load and play the corresponding story segment within the current runtime.
 
 ```haxe
-novel.onStory = onStory;
+runtime.onStory = onStory;
 ```
 
 
@@ -139,9 +139,9 @@ function onStory(name:String) {
 	var entry = sys.io.File.getContent("res/" + name + ".txt");
 		
 	story = Library.get(entry);
-	novel.story = story;
+	runtime.story = story;
 
-	novel.nextPage();
+	runtime.nextPage();
 }
 ```
 
@@ -158,7 +158,7 @@ For example, it can be used to implement custom formatting for variables in the 
 ### Example:
 
 ```haxe
-novel.onPage = onPage;
+runtime.onPage = onPage;
 ```
 
 
@@ -219,7 +219,7 @@ import harrow.Format;
 
 ...
 
-novel.onEvent = onEvent;
+runtime.onEvent = onEvent;
 ```
 
 ```haxe
