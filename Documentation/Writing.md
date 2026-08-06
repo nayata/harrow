@@ -162,19 +162,21 @@ Variables can also be shown inside choices.
 
 
 
-# Conditional blocks
+# Conditional Blocks
 
-A simple `if`.
+Conditional blocks allow story content to change based on the current state of variables.
+
+Supported comparison operators are `==`, `!=`, `<`, `>`, `<=`, and `>=`. As an alternative to `==`, Harrow also supports the `is` operator for equality comparisons.
+
+#### If
 
 ```
-[torch.lit = true]
-
-[if torch.lit == true]
-    The torch casts long shadows across the stone walls.
+[if health > 50]
+    You feel strong.
 [end]
 ```
 
-`if/else` condition. As an alternative to `==`, Harrow also supports the `is` operator for equality comparisons.
+#### If / Else
 
 ```
 [if torch.lit is true]
@@ -183,6 +185,19 @@ A simple `if`.
     Darkness swallows everything beyond the first few steps.
 [end]
 ```
+
+#### Comparing Variables
+
+Variables can also be compared with other variables.
+
+```
+[if strength >= enemy.strength]
+    You overpower your opponent.
+[else]
+    Your opponent forces you back.
+[end]
+```
+
 
 
 ## CoG-style Fairmath
