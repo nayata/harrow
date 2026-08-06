@@ -75,48 +75,6 @@ class App extends hxd.App {
 ```
 
 
-### onText
-
-Called whenever the runtime processes a line of story text.
-
-The `text` parameter contains the story text.
-The `name` parameter contains the speaker name if one was specified in the script. Otherwise it is an empty string.
-
-
-### onDialogue
-
-Called whenever the runtime encounters one or more choices.
-
-Each `Choice` contains the following fields:
-
-```haxe
-choice.text   // Choice text.
-choice.link   // Route associated with the choice.
-choice.data   // Action associated with the choice.
-choice.mode   // Choice mode.
-```
-
-When the player selects a choice, pass its route and action back to the runtime:
-
-```haxe
-function onDialogue(choices:Array<Choice>) {
-	for (entry in choices) {
-		var choice = new Button(dialogue);
-		choice.text = entry.text;
-
-		choice.onclick = function(e:hxd.Event) { 
-			novel.onChoice(entry.link, entry.data);
-		}
-	}
-}
-
-function onSelect(link:String, data:String) {
-	dialogue.removeChildren();
-	novel.onChoice(link, data);
-}
-```
-
-
 
 # Flow handling
 
