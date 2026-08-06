@@ -25,12 +25,10 @@ Include the library in your project's `.hxml`:
 To run a story in Harrow:
 
 1. Load and parse the story file into a `harrow.Story` object using `harrow.Library`.
-
 2. Create a `harrow.Runtime` instance and pass the `Story` to it.
-
 3. Assign your own functions—such as `onText`, `onDialogue`, and others—to the `harrow.Runtime` to define how the runtime interacts with your UI or systems.
+4. Start the story flow by calling the `runtime.nextPage()` function.
 
-4. Start the story flow by calling the `novel.nextPage()` function.
 
 ### Example (using Heaps):
 
@@ -58,13 +56,15 @@ class App extends hxd.App {
 		novel.nextPage(); 
 	}
 
+	// `name` is the speaker, taken from the `Name:` prefix in the script; empty if the line has no speaker
 	function onText(text:String, name:String) {
-		trace(name, text);
+		// Display the text and the speaker name(if one was specified in the script)
 	}
 
+	// each `choice` carries everything needed to render an option and later report it back
 	function onDialogue(choices:Array<Choice>) {
 		for (choice in choices) {
-			trace(choice.text);
+			// Display the choice
 		}
 	}
 
@@ -75,34 +75,81 @@ class App extends hxd.App {
 ```
 
 
+### onText
+
+Called whenever the runtime processes a line of story text.
+
+The `text` parameter contains the story text.
+The `name` parameter contains the speaker name if one was specified in the script. Otherwise it is an empty string.
+
+
+### onDialogue
+
+Called whenever the runtime encounters one or more choices.
+
+Each `Choice` contains the following fields:
+
+```haxe
+choice.text   // Choice text.
+choice.link   // Route associated with the choice.
+choice.data   // Action associated with the choice.
+choice.mode   // Choice mode.
+```
+
+When the player selects a choice, pass its route and action back to the runtime:
+
+```haxe
+function onDialogue(choices:Array<Choice>) {
+	for (entry in choices) {
+		var choice = new Button(dialogue);
+		choice.text = entry.text;
+
+		choice.onclick = function(e:hxd.Event) { 
+			novel.onChoice(entry.link, entry.data);
+		}
+	}
+}
+
+function onSelect(link:String, data:String) {
+	dialogue.removeChildren();
+	novel.onChoice(link, data);
+}
+```
+
+
 
 # Flow handling
 
 **Harrow** uses a flow-based execution model, unlike systems such as **Twine**, which display the entire content of a passage at once. In Harrow, content is revealed step-by-step, following the flow of the story.
 
-Depending on the page type, the flow may automatically continue to the next page or pause, waiting for an external command to proceed.
-
-`Text` and `Dialogue` are cases where **user input is required** to continue the story flow.
-
-This can be handled through UI interactions or keyboard events. This ensures the story only progresses when the player is ready.
+Depending on the page type, the flow may automatically continue to the next page or pause, waiting for an external command to proceed. `Text` and `Dialogue` are cases where **user input is required** to continue the story flow — handled through UI interactions or keyboard events, so the story only progresses when the player is ready.
 
 ### Text
 
 After displaying the text content, the runtime waits for continuation. Once input is received, call:
 
-```haxe
+```
 novel.nextPage();
 ```
 
 ### Dialogue (Choices)
 
-For choices, the runtime pauses and waits for choice input.
-After the player selects an option, pass the choice information to the runtime:
+For choices, the runtime pauses and waits for a selection. Each entry in the `choices` array passed to `onDialogue` is a `harrow.Choice`, describing one option:
 
 ```haxe
-novel.onChoice(choice.type, choice.data);
+public var text:String = "empty"; // text to show to the player
+public var link:String = "empty"; // route to jump to, if the choice navigates
+public var data:String = "empty"; // value to apply, if the choice sets a variable
+public var mode:String = "empty"; // action type attached by the parser
 ```
 
+`link` and `data` mirror the action written after `:` on the choice's line in the script (see [Choices](https://github.com/nayata/harrow/blob/main/Documentation/Writing.md#choices)); fields that don't apply stay `"empty"`.
+
+Once the player picks an option, pass its `link` and `data` back to the runtime:
+
+```
+novel.onChoice(choice.link, choice.data);
+```
 
 See a [Heaps](https://github.com/nayata/harrow/blob/main/example/src/App.hx) and [HTML](https://github.com/nayata/harrow-twine/blob/main/src/App.hx) example.
 
@@ -242,5 +289,6 @@ function onEvent(type:String, data:String) {
 `onEvent` can act as a hub, routing data to the appropriate class. See `App.hx` and `Prefab.hx` in [examples](https://github.com/nayata/harrow/tree/main/example).
 
 Events automatically advance the flow to the next page after execution.
+
 
 See [Twine](Twine.md) for more information.
